@@ -1,0 +1,72 @@
+# Ignore compiled Python files and __pycache__ folders
+*.pyc
+__pycache__/
+
+# Ignore project-specific environment files
+.env
+
+# Ignore system-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore logs and temporary files
+logs/
+temp/
+*.log
+
+# Ignore project-specific config files
+config/settings.py
+
+# Ignore IDE and editor files
+.vscode/
+.idea/
+*.pydevproject
+
+# Ignore virtual environment folders
+venv/
+env/
+ENV/
+lib/
+include/
+bin/
+
+# Ignore package installation files
+*.egg-info/
+dist/
+build/
+
+# Ignore backup files
+*.bak
+
+# Ignore database files
+*.db
+*.sqlite3
+
+# Ignore cache files
+__pycache__/
+.cache/
+
+# Ignore compiled extensions
+*.so
+
+# Ignore compiled executables
+*.exe
+
+# Ignore user-specific files
+user_data/
+
+# Ignore sensitive information (credentials, API keys, etc.)
+secrets.yaml
+secrets.json
+
+# Ignore generated files
+generated_files/
+
+# Ignore testing artifacts
+test_results/
+note_templates/
+input_data/
+output_data/
+
+# Ignore documentation
+docs/
