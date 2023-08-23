@@ -111,5 +111,5 @@ def generate_word_files(data_list, template_dir, output_dir):
             replace_placeholders_in_table(doc, data_row)
             replace_additional_placeholders(doc, "PROVALOR")  # Add entity-specific placeholders
             
-            output_word_path = f"{output_dir}/output_document_{index + 1}.docx"
+            output_word_path = f"{output_dir}/{data_row[0]}_document_{index + 1}.docx"
             doc.save(output_word_path)
