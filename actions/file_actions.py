@@ -17,6 +17,17 @@ def extract_data_from_excel(excel_file_path):
     return data_list
 
 
+def is_date(value):
+    """Comprueba si el valor es una fecha."""
+    return isinstance(value, datetime.datetime)
+    
+
+def format_date(date_obj):
+    """Formatea un objeto datetime en formato DD/MM/AAAA."""
+    formatted_date = date_obj.strftime("%d/%m/%Y")
+    return formatted_date
+
+
 def replace_placeholders_in_word_template(doc, data_row):
     """Replaces placeholders in a Word template with data from a row."""
     for i, value in enumerate(data_row):
@@ -24,9 +35,7 @@ def replace_placeholders_in_word_template(doc, data_row):
         for paragraph in doc.paragraphs:
             if placeholder in paragraph.text:
                 paragraph.text = paragraph.text.replace(placeholder, str(value))
-
-    
-
+         
 
 def replace_placeholders_in_table(doc, data_row):
     """Replaces placeholders in runs within a table with data from a row."""
@@ -37,14 +46,22 @@ def replace_placeholders_in_table(doc, data_row):
                     for run in paragraph.runs:
                         for i, value in enumerate(data_row):
                             placeholder = f"{{Value{i+1}}}"
+                            if is_date(value):
+                                value = format_date(value)  # Format if it is a date
                             if placeholder in run.text:
                                 run.text = run.text.replace(placeholder, str(value))
 
-                        # Add the new placeholders and fill them with data
-                        run.text = run.text.replace("{fecha_nota}", get_formatted_date())
-                        run.text = run.text.replace("{entidad}", "PROVALOR S.A.")
-                        run.text = run.text.replace("{receptor}", "Viviana Trociuk")
-                        run.text = run.text.replace("{mes}", get_current_month())
+
+def replace_additional_placeholders(doc, entidad):
+    """Replaces additional placeholders in a Word document with specific data."""
+    for paragraph in doc.paragraphs:
+        for run in paragraph.runs:
+            # Replace placeholders with corresponding data
+            run.text = run.text.replace("{fechanota}", get_formatted_date())
+            run.text = run.text.replace("{entidad}", entidad)
+            run.text = run.text.replace("{receptor}", "Nombre del Receptor")
+            run.text = run.text.replace("{mes}", translate_month_to_spanish(get_current_month()))
+
 
 def get_formatted_date():
     """Returns the current date in the format "18 de enero de 2023"."""
@@ -57,6 +74,26 @@ def get_current_month():
     """Returns the name of the current month."""
     today = datetime.date.today()
     return today.strftime("%B")
+
+
+def translate_month_to_spanish(month):
+    """Translates the name of a month from English to Spanish."""
+    switch_case = {
+        "January": "enero",
+        "February": "febrero",
+        "March": "marzo",
+        "April": "abril",
+        "May": "mayo",
+        "June": "junio",
+        "July": "julio",
+        "August": "agosto",
+        "September": "septiembre",
+        "October": "octubre",
+        "November": "noviembre",
+        "December": "diciembre"
+    }
+    
+    return switch_case.get(month, "Mes no válido")
 
 
 def generate_word_files(data_list, template_dir, output_dir):
@@ -72,6 +109,7 @@ def generate_word_files(data_list, template_dir, output_dir):
             doc = Document(selected_template_path)
             replace_placeholders_in_word_template(doc, data_row)
             replace_placeholders_in_table(doc, data_row)
+            replace_additional_placeholders(doc, "PROVALOR")  # Add entity-specific placeholders
             
             output_word_path = f"{output_dir}/output_document_{index + 1}.docx"
             doc.save(output_word_path)
