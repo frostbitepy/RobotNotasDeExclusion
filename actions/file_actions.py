@@ -67,6 +67,9 @@ def get_formatted_date():
     """Returns the current date in the format "18 de enero de 2023"."""
     today = datetime.date.today()
     formatted_date = today.strftime("%d de %B de %Y")
+    # Translate the month name to Spanish
+    month_name = translate_month_to_spanish(today.strftime("%B"))    
+    formatted_date = formatted_date.replace(today.strftime("%B"), month_name)
     return formatted_date
 
 
