@@ -14,7 +14,7 @@ def main():
         if st.button("Generar Notas"):
             output_dir = "output_data"
             generate_word_files_streamlit(data_list, template_dir, output_dir, uploaded_file)
-            generate_word_files(data_list, template_dir, output_dir)
+            #generate_word_files(data_list, template_dir, output_dir)
             st.success("Notas generadas exitosamente!")
             
             if st.button("Descargar Notas"):
