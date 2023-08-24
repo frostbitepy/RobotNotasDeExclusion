@@ -1,6 +1,7 @@
 import streamlit as st
 import shutil
 import tempfile
+import os
 from actions.file_actions import extract_data_from_excel, generate_word_files, generate_word_files_streamlit
 
 # Define the template directory
@@ -15,13 +16,20 @@ def main():
         if st.button("Generar Notas"):
             output_dir = tempfile.mkdtemp()  # Create a temporary directory
             generate_word_files_streamlit(data_list, template_dir, output_dir, uploaded_file)
-            #generate_word_files(data_list, template_dir, output_dir)
-            st.success("Notas generadas exitosamente!")
-            
-            if st.button("Descargar Notas"):
-                # Provide download link for the generated notes
-                download_notes(output_dir)
+            st.success("Notas generadas exitosamente!")  
 
+        # Display the generated notes
+        st.write("Notas Generadas:")
+        for file in os.listdir(output_dir):
+            if file.endswith(".docx"):
+                st.write(f"- [{file}]({os.path.join(output_dir, file)})")
+            
+        if st.button("Descargar Notas"):
+            # Create and download the ZIP file
+            zip_filename = zip_notes(output_dir)
+            download_notes(zip_filename)
+
+        
 
 def zip_notes(output_dir):
     # Create a ZIP file containing all generated notes
@@ -33,7 +41,8 @@ def zip_notes(output_dir):
 def download_notes(zip_filename):
     # Provide a download button for the ZIP file
     with open(zip_filename, "rb") as f:
-        if st.download_button("Descargar Todas las Notas", f.read(), file_name="notas_generadas.zip"):
+        if st.button("Descargar Todas las Notas"):
+            st.download_button("Descargar Todas las Notas", f.read(), file_name="notas_generadas.zip")
             st.write("¡Gracias por descargar las notas!")
 
 
