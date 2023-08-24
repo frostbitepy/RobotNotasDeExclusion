@@ -1,6 +1,7 @@
 import openpyxl
 import os
 import datetime
+import streamlit as st
 from docx import Document
 
 
@@ -122,6 +123,8 @@ def generate_word_files_streamlit(data_list, template_dir, output_dir, uploaded_
     """Generates a Word file for each row's data using the appropriate template. Streamlit app."""
     template_files = os.listdir(template_dir)  # List all files in the template directory
 
+    generated_files = []  # List to store paths of generated files
+
     for index, data_row in enumerate(data_list):
         template_name = data_row[0] + '.docx'  # Assuming the first element is the template name
 
@@ -135,3 +138,8 @@ def generate_word_files_streamlit(data_list, template_dir, output_dir, uploaded_
 
             output_word_path = f"{output_dir}/{data_row[0]}_document_{index + 1}.docx"
             doc.save(output_word_path)
+
+            generated_files.append(output_word_path)  # Store generated file path
+
+    # Store the generated files in session state
+    st.session_state.generated_files = generated_files
