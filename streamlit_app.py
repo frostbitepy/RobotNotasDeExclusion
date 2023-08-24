@@ -10,6 +10,9 @@ template_dir = "note_templates"
 def main():
     st.title("Generación automática de Notas de Exclusión")
     uploaded_file = st.file_uploader("Cargar archivo Excel", type=["xlsx"])
+    # Declare output_dir with a default value
+    output_dir = None
+
     if uploaded_file:
         data_list = extract_data_from_excel(uploaded_file)
         
@@ -25,9 +28,18 @@ def main():
                 st.write(f"- [{file}]({os.path.join(output_dir, file)})")
             
         if st.button("Descargar Notas"):
-            # Create and download the ZIP file
-            zip_filename = zip_notes(output_dir)
-            download_notes(zip_filename)
+            if output_dir:
+                # Create and download the ZIP file
+                zip_filename = zip_notes(output_dir)
+                download_notes(zip_filename)
+
+    # Move the code to display the generated notes outside of the if blocks
+    if output_dir:
+        # Display the generated notes
+        st.write("Notas Generadas:")
+        for file in os.listdir(output_dir):
+            if file.endswith(".docx"):
+                st.write(f"- [{file}]({os.path.join(output_dir, file)})")
 
         
 
