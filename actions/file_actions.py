@@ -116,3 +116,22 @@ def generate_word_files(data_list, template_dir, output_dir):
             
             output_word_path = f"{output_dir}/{data_row[0]}_document_{index + 1}.docx"
             doc.save(output_word_path)
+
+
+def generate_word_files_streamlit(data_list, template_dir, output_dir, uploaded_file):
+    """Generates a Word file for each row's data using the appropriate template. Streamlit app."""
+    template_files = os.listdir(template_dir)  # List all files in the template directory
+
+    for index, data_row in enumerate(data_list):
+        template_name = data_row[0] + '.docx'  # Assuming the first element is the template name
+
+        if template_name in template_files:
+            selected_template_path = os.path.join(template_dir, template_name)
+
+            doc = Document(selected_template_path)
+            replace_placeholders_in_word_template(doc, data_row)
+            replace_placeholders_in_table(doc, data_row)
+            replace_additional_placeholders(doc, "PROVALOR")  # Add entity-specific placeholders
+
+            output_word_path = f"{output_dir}/{data_row[0]}_document_{index + 1}.docx"
+            doc.save(output_word_path)
