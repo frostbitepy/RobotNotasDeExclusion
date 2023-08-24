@@ -64,9 +64,9 @@ generated_files/
 
 # Ignore testing artifacts
 test_results/
-note_templates/
+#note_templates/
 input_data/
-output_data/
+#output_data/
 
 # Ignore documentation
 docs/
