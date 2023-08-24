@@ -1,5 +1,6 @@
 import streamlit as st
 import shutil
+import tempfile
 from actions.file_actions import extract_data_from_excel, generate_word_files, generate_word_files_streamlit
 
 # Define the template directory
@@ -12,7 +13,7 @@ def main():
         data_list = extract_data_from_excel(uploaded_file)
         
         if st.button("Generar Notas"):
-            output_dir = "output_data"
+            output_dir = tempfile.mkdtemp()  # Create a temporary directory
             generate_word_files_streamlit(data_list, template_dir, output_dir, uploaded_file)
             #generate_word_files(data_list, template_dir, output_dir)
             st.success("Notas generadas exitosamente!")
@@ -24,7 +25,7 @@ def main():
 
 def zip_notes(output_dir):
     # Create a ZIP file containing all generated notes
-    zip_filename = "/tmp/streamlit/notas_generadas.zip"
+    zip_filename = tempfile.mktemp(suffix=".zip")
     shutil.make_archive(zip_filename, 'zip', output_dir)
     return zip_filename
 
