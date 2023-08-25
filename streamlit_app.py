@@ -6,22 +6,24 @@ from actions.file_actions import extract_data_from_excel, generate_word_files, g
 
 # Define the template directory
 template_dir = "note_templates"
+entidades = ["PROVALOR", "PROGRESAR", "SUDAMERIS", "FACTORY"]
 
 def main():
     st.title("Generación automática de Notas de Exclusión")
     uploaded_file = st.file_uploader("Cargar archivo Excel", type=["xlsx"])
+    # Add a selectbox to choose the entidad
+    entidad = st.selectbox("Seleccionar Entidad:", entidades)
     # Declare output_dir with a default value
     output_dir = None
 
     if uploaded_file:
-        data_list = extract_data_from_excel(uploaded_file)
+        data_list = extract_data_from_excel(uploaded_file, entidad)
         
         if st.button("Generar Notas"):
             output_dir = tempfile.mkdtemp()  # Create a temporary directory
-            generate_word_files_streamlit(data_list, template_dir, output_dir, uploaded_file)
+            generate_word_files_streamlit(data_list, template_dir, output_dir, uploaded_file, entidad)
             st.session_state.generated_files = output_dir  # Store the output directory in session state
-            st.success("Notas generadas exitosamente!")
-        
+            st.success("Notas generadas exitosamente!")        
             # Call the download_notes function here
             download_notes(output_dir)
 
@@ -34,8 +36,7 @@ def zip_notes(output_dir):
 
 
 def download_notes(output_dir):
-    zip_filename = zip_notes(output_dir)
-    
+    zip_filename = zip_notes(output_dir)    
     # Provide a download button for the ZIP file
     with open(zip_filename, "rb") as f:
         if st.download_button("Descargar Notas", f.read(), file_name="notas_generadas.zip"):

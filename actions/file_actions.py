@@ -5,17 +5,34 @@ import streamlit as st
 from docx import Document
 
 
-def extract_data_from_excel(excel_file_path):
+def extract_data_from_excel(excel_file_path, entidad):
     """Extracts data from an Excel file and returns it as a list of lists."""
     workbook = openpyxl.load_workbook(excel_file_path)
     sheet = workbook.active
-
     data_list = []
     for row in sheet.iter_rows(min_row=2, values_only=True):
         data_list.append(list(row))
-
     workbook.close()
+    data_list = reorder_values_for_entity(entidad, data_list)
     return data_list
+
+
+def reorder_values_for_entity(entidad, data_list):
+    # Implement the logic to reorder the data_list based on the entidad
+    # For example, you can use a dictionary to define the order for each entidad
+    entity_order = {
+        "PROVALOR": [0, 1, 2, 3],  # Replace with the correct order of indexes
+        "PROGRESAR": [2, 0, 1, 3],
+        "SUDAMERIS": [1, 3, 0, 2],
+        "FACTORY": [3, 2, 1, 0]
+    }  
+    if entidad in entity_order:
+        order = entity_order[entidad]
+        reordered_data_list = [data_list[i] for i in order]
+        return reordered_data_list
+    else:
+        # Return the original data_list if the entidad is not recognized
+        return data_list
 
 
 def is_date(value):
@@ -58,10 +75,22 @@ def replace_additional_placeholders(doc, entidad):
     for paragraph in doc.paragraphs:
         for run in paragraph.runs:
             # Replace placeholders with corresponding data
-            run.text = run.text.replace("{fechanota}", get_formatted_date())
+            run.text = run.text.replace("{fechanota}", "Encarncación, " + get_formatted_date())
             run.text = run.text.replace("{entidad}", entidad)
-            run.text = run.text.replace("{receptor}", "Nombre del Receptor")
+            run.text = run.text.replace("{receptor}", get_receptor_segun_entidad(entidad))
             run.text = run.text.replace("{mes}", translate_month_to_spanish(get_current_month()))
+
+
+def get_receptor_segun_entidad(entidad):
+    """Returns the name of the receptor according to the entity."""
+    switch_case = {
+        "PROVALOR": "Sra. Viviana Trociuk",
+        "PROGRESAR": "Sra. Raisa Gutmann",
+        "SUDAMERIS": "Sra. Roxana Arias",
+        "FACTORY": "Sra. Rocío González"
+    }
+    
+    return switch_case.get(entidad, "Nombre del Receptor")
 
 
 def get_formatted_date():
@@ -113,13 +142,13 @@ def generate_word_files(data_list, template_dir, output_dir):
             doc = Document(selected_template_path)
             replace_placeholders_in_word_template(doc, data_row)
             replace_placeholders_in_table(doc, data_row)
-            replace_additional_placeholders(doc, "PROVALOR")  # Add entity-specific placeholders
+            replace_additional_placeholders(doc)  # Add entity-specific placeholders
             
             output_word_path = f"{output_dir}/{data_row[0]}_document_{index + 1}.docx"
             doc.save(output_word_path)
 
 
-def generate_word_files_streamlit(data_list, template_dir, output_dir, uploaded_file):
+def generate_word_files_streamlit(data_list, template_dir, output_dir, uploaded_file, entidad):
     """Generates a Word file for each row's data using the appropriate template. Streamlit app."""
     template_files = os.listdir(template_dir)  # List all files in the template directory
 
@@ -134,7 +163,7 @@ def generate_word_files_streamlit(data_list, template_dir, output_dir, uploaded_
             doc = Document(selected_template_path)
             replace_placeholders_in_word_template(doc, data_row)
             replace_placeholders_in_table(doc, data_row)
-            replace_additional_placeholders(doc, "PROVALOR")  # Add entity-specific placeholders
+            replace_additional_placeholders(doc, entidad)  # Add entity-specific placeholders
 
             output_word_path = f"{output_dir}/{data_row[0]}_document_{index + 1}.docx"
             doc.save(output_word_path)
