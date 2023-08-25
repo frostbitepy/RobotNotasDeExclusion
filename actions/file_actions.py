@@ -3,6 +3,7 @@ import os
 import datetime
 import streamlit as st
 from docx import Document
+from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 
 
 def extract_data_from_excel(excel_file_path, entidad):
@@ -72,13 +73,25 @@ def replace_placeholders_in_table(doc, data_row):
 
 def replace_additional_placeholders(doc, entidad):
     """Replaces additional placeholders in a Word document with specific data."""
+    add_text_to_document(doc, "Encarnación, " + get_formatted_date())
     for paragraph in doc.paragraphs:
         for run in paragraph.runs:
             # Replace placeholders with corresponding data
-            run.text = run.text.replace("{fechanota}", "Encarncación, " + get_formatted_date())
+            #run.text = run.text.replace("{fechanota}", "Encarncación, " + get_formatted_date())
             run.text = run.text.replace("{entidad}", entidad)
             run.text = run.text.replace("{receptor}", get_receptor_segun_entidad(entidad))
             run.text = run.text.replace("{mes}", translate_month_to_spanish(get_current_month()))
+
+    
+def add_text_to_document(doc, new_text):
+    # Obtiene el primer párrafo original
+    first_paragraph = doc.paragraphs[0]
+    # Borra el contenido del primer párrafo
+    for run in first_paragraph.runs:
+        run.clear()
+    # Agrega el nuevo texto en el primer párrafo
+    first_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+    run = first_paragraph.add_run(new_text)
 
 
 def get_receptor_segun_entidad(entidad):
