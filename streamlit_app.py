@@ -4,24 +4,31 @@ import tempfile
 import os
 from actions.file_actions import extract_data_from_excel, generate_word_files, generate_word_files_streamlit
 
+
 # Define the template directory
-template_dir = "note_templates"
+template_dir = "note_templates/template.docx"
 entidades = ["PROVALOR", "PROGRESAR", "SUDAMERIS", "FACTORY"]
+monedas = ["GS", "USD"]
+productos = ["Préstamos de Consumo", "Sobregiros", "Tarjetas de Crédito"]
 
 def main():
     st.title("Generación automática de Notas de Exclusión")
     uploaded_file = st.file_uploader("Cargar archivo Excel", type=["xlsx"])
     # Add a selectbox to choose the entidad
     entidad = st.selectbox("Seleccionar Entidad:", entidades)
+    # Agregar un widget de radio para elegir entre GS y USD
+    moneda = st.selectbox("Elegir Moneda:", monedas)
+    # Add a selectbox to choose the product tipe
+    producto = st.selectbox("Elegir Producto:", productos)
     # Declare output_dir with a default value
     output_dir = None
 
     if uploaded_file:
-        data_list = extract_data_from_excel(uploaded_file, entidad)
+        data_list = extract_data_from_excel(uploaded_file)
         
         if st.button("Generar Notas"):
             output_dir = tempfile.mkdtemp()  # Create a temporary directory
-            generate_word_files_streamlit(data_list, template_dir, output_dir, uploaded_file, entidad)
+            generate_word_files_streamlit(data_list, template_dir, output_dir, uploaded_file, entidad, moneda, producto)
             st.session_state.generated_files = output_dir  # Store the output directory in session state
             st.success("Notas generadas exitosamente!")        
             # Call the download_notes function here

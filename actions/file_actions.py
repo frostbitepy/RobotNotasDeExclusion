@@ -4,9 +4,10 @@ import datetime
 import streamlit as st
 from docx import Document
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
+from actions.word_template_generator import generate_template_with_content
 
 
-def extract_data_from_excel(excel_file_path, entidad):
+def extract_data_from_excel(excel_file_path):
     """Extracts data from an Excel file and returns it as a list of lists."""
     workbook = openpyxl.load_workbook(excel_file_path)
     sheet = workbook.active
@@ -14,11 +15,12 @@ def extract_data_from_excel(excel_file_path, entidad):
     for row in sheet.iter_rows(min_row=2, values_only=True):
         data_list.append(list(row))
     workbook.close()
-    data_list = reorder_values_for_entity(entidad, data_list)
+    #data_list = reorder_values_for_entity(data_list, entidad)
     return data_list
 
 
-def reorder_values_for_entity(entidad, data_list):
+def reorder_values_for_entity(data_list, entidad):
+    
     # Implement the logic to reorder the data_list based on the entidad
     # For example, you can use a dictionary to define the order for each entidad
     entity_order = {
@@ -71,7 +73,7 @@ def replace_placeholders_in_table(doc, data_row):
                                 run.text = run.text.replace(placeholder, str(value))
 
 
-def replace_additional_placeholders(doc, entidad):
+def replace_additional_placeholders(doc, entidad, moneda):
     """Replaces additional placeholders in a Word document with specific data."""
     add_text_to_document(doc, "Encarnación, " + get_formatted_date())
     for paragraph in doc.paragraphs:
@@ -80,8 +82,9 @@ def replace_additional_placeholders(doc, entidad):
             #run.text = run.text.replace("{fechanota}", "Encarncación, " + get_formatted_date())
             run.text = run.text.replace("{entidad}", entidad)
             run.text = run.text.replace("{receptor}", get_receptor_segun_entidad(entidad))
-            run.text = run.text.replace("{mes}", translate_month_to_spanish(get_current_month()))
-
+            run.text = run.text.replace("{Val0}", moneda)
+            run.text = run.text.replace("{mes}", translate_month_to_spanish(get_current_month()))      
+            
     
 def add_text_to_document(doc, new_text):
     # Obtiene el primer párrafo original
@@ -101,8 +104,7 @@ def get_receptor_segun_entidad(entidad):
         "PROGRESAR": "Sra. Raisa Gutmann",
         "SUDAMERIS": "Sra. Roxana Arias",
         "FACTORY": "Sra. Rocío González"
-    }
-    
+    }    
     return switch_case.get(entidad, "Nombre del Receptor")
 
 
@@ -147,7 +149,7 @@ def generate_word_files(data_list, template_dir, output_dir):
     template_files = os.listdir(template_dir)  # List all files in the template directory
 
     for index, data_row in enumerate(data_list):
-        template_name = data_row[0] + '.docx' # Assuming the first element is the template name
+        template_name = data_row[14] + '.docx' # Assuming the first element is the template name
 
         if template_name in template_files:
             selected_template_path = os.path.join(template_dir, template_name)
@@ -157,31 +159,26 @@ def generate_word_files(data_list, template_dir, output_dir):
             replace_placeholders_in_table(doc, data_row)
             replace_additional_placeholders(doc)  # Add entity-specific placeholders
             
-            output_word_path = f"{output_dir}/{data_row[0]}_document_{index + 1}.docx"
+            output_word_path = f"{output_dir}/{data_row[14]}_document_{index + 1}.docx"
             doc.save(output_word_path)
 
 
-def generate_word_files_streamlit(data_list, template_dir, output_dir, uploaded_file, entidad):
+def generate_word_files_streamlit(data_list, template_dir, output_dir, uploaded_file, entidad, moneda, producto):
     """Generates a Word file for each row's data using the appropriate template. Streamlit app."""
-    template_files = os.listdir(template_dir)  # List all files in the template directory
+    # List all files in the template directory
+    # template_files = os.listdir(template_dir)  
 
     generated_files = []  # List to store paths of generated files
 
     for index, data_row in enumerate(data_list):
-        template_name = data_row[0] + '.docx'  # Assuming the first element is the template name
+        # Assuming the first element is the template name 
+        # #template_name = data_row[14] + '.docx'
+        doc = Document(template_dir)
+        generate_template_with_content(doc, entidad, moneda, producto, data_row)
+        output_word_path = f"{output_dir}/{entidad}_{data_row[14]}_document_{index + 1}.docx"
+        doc.save(output_word_path)
+        generated_files.append(output_word_path)  # Store generated file path
 
-        if template_name in template_files:
-            selected_template_path = os.path.join(template_dir, template_name)
-
-            doc = Document(selected_template_path)
-            replace_placeholders_in_word_template(doc, data_row)
-            replace_placeholders_in_table(doc, data_row)
-            replace_additional_placeholders(doc, entidad)  # Add entity-specific placeholders
-
-            output_word_path = f"{output_dir}/{data_row[0]}_document_{index + 1}.docx"
-            doc.save(output_word_path)
-
-            generated_files.append(output_word_path)  # Store generated file path
 
     # Store the generated files in session state
     st.session_state.generated_files = generated_files
