@@ -27,7 +27,7 @@ def generate_cumulo_template(doc, data_row, currency, producto):
     nombre_cells[1].text = data_row[0]
     documento_cells = asegurado_table.rows[1].cells
     documento_cells[0].text = 'Documento:'
-    documento_cells[1].text = data_row[1]
+    documento_cells[1].text = str(data_row[1])
     nacimiento_cells = asegurado_table.rows[2].cells
     nacimiento_cells[0].text = 'Fecha de Nacimiento:'
     nacimiento_cells[1].text = format_date(data_row[2])
