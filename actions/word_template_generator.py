@@ -581,6 +581,6 @@ def generate_template_with_content(doc, entity_name, currency, producto, data_ro
     despedida_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY 
 
     # Save the document
-    template_filename = f"{output_dir}/{entity_name}_{template_name}_{currency}_template.docx"
+    template_filename = f"{entity_name}_{template_name}_{currency}_template.docx"
     doc.save(template_filename)
     return template_filename
