@@ -12,10 +12,11 @@ output_dir = "output_data"
 #template_dir = "note_templates/template.docx"
 
 
-def generate_cumulo_template(doc, data_row, currency, producto):
+def generate_cumulo_template(doc, data_row, currency, producto, code):
     from actions.file_actions import translate_month_to_spanish, get_current_month, format_date
     # Add texto exclusion
-    exclusion_paragraph = doc.add_paragraph("Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por superar el capital de Gs. 3.000.000.000, establecido como cúmulo máximo por Asegurado.")
+    monto = "3.000.000.000"
+    exclusion_paragraph = doc.add_paragraph(("Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por superar el capital de Gs. {monto}, establecido como cúmulo máximo por Asegurado.").format(monto=monto))
     exclusion_paragraph = doc.add_paragraph(("La operación corresponde a la planilla de {producto} en moneda {moneda} del mes de {mes}.").format(producto=producto, moneda=currency, mes=translate_month_to_spanish(get_current_month())))
     exclusion_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
 
@@ -531,6 +532,42 @@ def generate_anulado_template(doc, data_row, currency, producto):
    
     # Add a section break
     doc.add_paragraph(" ")
+
+
+def generate_diferencia_ds_template(doc, data_row, currency, producto):
+    pass
+
+
+def generate_informacion_adicional_template(doc, data_row, currency, producto):
+    pass
+
+
+def generate_exclusiones_previas_template(doc, data_row, currency, producto):
+    pass
+
+
+def generate_operacion_adeudada_template(doc, data_row, currency, producto):
+    pass
+
+
+def generate_persona_juridica_template(doc, data_row, currency, producto):
+    pass
+
+
+def generate_cambio_condiciones_template(doc, data_row, currency, producto):
+    pass
+
+
+def generate_analisis_template(doc, data_row, currency, producto):
+    pass
+
+
+def generate_historial_cobertura_template(doc, data_row, currency, producto):
+    pass
+
+
+def generate_no_renovado_template(doc, data_row, currency, producto):
+    pass
 
 
 def generate_template_with_content(doc, entity_name, currency, producto, data_row):
