@@ -19,25 +19,6 @@ def extract_data_from_excel(excel_file_path):
     return data_list
 
 
-def reorder_values_for_entity(data_list, entidad):
-    
-    # Implement the logic to reorder the data_list based on the entidad
-    # For example, you can use a dictionary to define the order for each entidad
-    entity_order = {
-        "PROVALOR": [0, 1, 2, 3],  # Replace with the correct order of indexes
-        "PROGRESAR": [2, 0, 1, 3],
-        "SUDAMERIS": [1, 3, 0, 2],
-        "FACTORY": [3, 2, 1, 0]
-    }  
-    if entidad in entity_order:
-        order = entity_order[entidad]
-        reordered_data_list = [data_list[i] for i in order]
-        return reordered_data_list
-    else:
-        # Return the original data_list if the entidad is not recognized
-        return data_list
-
-
 def is_date(value):
     """Comprueba si el valor es una fecha."""
     return isinstance(value, datetime.datetime)
@@ -100,9 +81,9 @@ def add_text_to_document(doc, new_text):
 def get_receptor_segun_entidad(entidad):
     """Returns the name of the receptor according to the entity."""
     switch_case = {
-        "PROVALOR": "Sra. Viviana Trociuk",
-        "PROGRESAR": "Sra. Raisa Gutmann",
-        "SUDAMERIS": "Sra. Roxana Arias",
+        "Provalor S.A.": "Sra. Viviana Trociuk",
+        "Progresar Corporation S.A.": "Sra. Raisa Gutmann",
+        "Sudameris Bank S.A.E.C.A.": "Sra. Alicia González",
         "FACTORY": "Sra. Rocío González"
     }    
     return switch_case.get(entidad, "Nombre del Receptor")

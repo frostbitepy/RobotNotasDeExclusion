@@ -12,13 +12,15 @@ output_dir = "output_data"
 #template_dir = "note_templates/template.docx"
 
 
-def generate_cumulo_template(doc, data_row, currency, producto, code):
+def generate_cumulo_template(doc, data_row, currency, producto):
     from actions.file_actions import translate_month_to_spanish, get_current_month, format_date
     # Add texto exclusion
     monto = "3.000.000.000"
-    exclusion_paragraph = doc.add_paragraph(("Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por superar el capital de Gs. {monto}, establecido como cúmulo máximo por Asegurado.").format(monto=monto))
-    exclusion_paragraph = doc.add_paragraph(("La operación corresponde a la planilla de {producto} en moneda {moneda} del mes de {mes}.").format(producto=producto, moneda=currency, mes=translate_month_to_spanish(get_current_month())))
+    exclusion_paragraph = doc.add_paragraph(("      Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por superar el capital de Gs. {monto}, establecido como cúmulo máximo por Asegurado.").format(monto=monto))
+    exclusion_paragraph.runs[0].font.name = 'Arial'
+    exclusion_paragraph = doc.add_paragraph(("      La operación corresponde a la planilla de {producto} en moneda {moneda} del mes de {mes}.").format(producto=producto, moneda=currency, mes=translate_month_to_spanish(get_current_month())))
     exclusion_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
+    exclusion_paragraph.runs[0].font.name = 'Arial'
 
     # Add a table asegurado
     asegurado_table = doc.add_table(rows=3, cols=2)
@@ -32,6 +34,12 @@ def generate_cumulo_template(doc, data_row, currency, producto, code):
     nacimiento_cells = asegurado_table.rows[2].cells
     nacimiento_cells[0].text = 'Fecha de Nacimiento:'
     nacimiento_cells[1].text = format_date(data_row[2])
+    for row in asegurado_table.rows:
+        for cell in row.cells:
+            # Obtener la fuente actual y establecer el tamaño
+            font = cell.paragraphs[0].runs[0].font
+            font.size = Pt(9)
+            font.name = 'Arial'
 
     # Add a section break
     doc.add_paragraph(" ")
@@ -60,6 +68,7 @@ def generate_cumulo_template(doc, data_row, currency, producto, code):
             # Obtener la fuente actual y establecer el tamaño
             font = cell.paragraphs[0].runs[0].font
             font.size = Pt(9)
+            font.name = 'Arial'
     
     # Definir el color gris (RGB: 192, 192, 192)
     gray_color = RGBColor(240, 240, 240)
@@ -77,9 +86,11 @@ def generate_cumulo_template(doc, data_row, currency, producto, code):
 def generate_fallecimiento_template(doc, data_row, currency, producto):
     from actions.file_actions import translate_month_to_spanish, get_current_month, format_date
     # Add texto exclusion
-    exclusion_paragraph = doc.add_paragraph("Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por fallecimiento.")
-    exclusion_paragraph = doc.add_paragraph(("La operación corresponde a la planilla de {producto} en moneda {moneda} del mes de {mes}.").format(producto=producto, moneda=currency, mes=translate_month_to_spanish(get_current_month())))
+    exclusion_paragraph = doc.add_paragraph("       Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por fallecimiento.")
+    exclusion_paragraph.runs[0].font.name = 'Arial'
+    exclusion_paragraph = doc.add_paragraph(("       La operación corresponde a la planilla de {producto} en moneda {moneda} del mes de {mes}.").format(producto=producto, moneda=currency, mes=translate_month_to_spanish(get_current_month())))
     exclusion_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
+    exclusion_paragraph.runs[0].font.name = 'Arial'
 
     # Add a table operacion
     operacion_table = doc.add_table(rows=2, cols=7)
@@ -111,6 +122,7 @@ def generate_fallecimiento_template(doc, data_row, currency, producto):
             # Obtener la fuente actual y establecer el tamaño
             font = cell.paragraphs[0].runs[0].font
             font.size = Pt(9)
+            font.name = 'Arial'
 
     # Definir el color gris (RGB: 192, 192, 192)
     gray_color = RGBColor(240, 240, 240)
@@ -125,13 +137,14 @@ def generate_fallecimiento_template(doc, data_row, currency, producto):
     doc.add_paragraph(" ")
     
 
-
 def generate_falta_ds_template(doc, data_row, currency, producto):
     from actions.file_actions import translate_month_to_spanish, get_current_month, format_date
     # Add texto exclusion
-    exclusion_paragraph = doc.add_paragraph("Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, debido a que no se ha presentado el formulario de Declaración de Salud.")
-    exclusion_paragraph = doc.add_paragraph(("La operación corresponde a la planilla de {producto} en moneda {moneda} del mes de {mes}.").format(producto=producto, moneda=currency, mes=translate_month_to_spanish(get_current_month())))
+    exclusion_paragraph = doc.add_paragraph("       Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, debido a que no se ha presentado el formulario de Declaración de Salud.")
+    exclusion_paragraph.runs[0].font.name = 'Arial'
+    exclusion_paragraph = doc.add_paragraph(("       La operación corresponde a la planilla de {producto} en moneda {moneda} del mes de {mes}.").format(producto=producto, moneda=currency, mes=translate_month_to_spanish(get_current_month())))
     exclusion_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
+    exclusion_paragraph.runs[0].font.name = 'Arial'
 
     # Add a table operacion
     operacion_table = doc.add_table(rows=2, cols=7)
@@ -163,6 +176,7 @@ def generate_falta_ds_template(doc, data_row, currency, producto):
             # Obtener la fuente actual y establecer el tamaño
             font = cell.paragraphs[0].runs[0].font
             font.size = Pt(9)
+            font.name = 'Arial'
 
     # Definir el color gris (RGB: 192, 192, 192)
     gray_color = RGBColor(240, 240, 240)
@@ -180,9 +194,11 @@ def generate_falta_ds_template(doc, data_row, currency, producto):
 def generate_ds_incompleta_template(doc, data_row, currency, producto):
     from actions.file_actions import translate_month_to_spanish, get_current_month, format_date
     # Add texto exclusion
-    exclusion_paragraph = doc.add_paragraph("Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por presentar incompleta su Declaración de Salud.")
-    exclusion_paragraph = doc.add_paragraph(("La operación corresponde a la planilla de {producto} en moneda {moneda} del mes de {mes}.").format(producto=producto, moneda=currency, mes=translate_month_to_spanish(get_current_month())))
+    exclusion_paragraph = doc.add_paragraph("       Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por presentar incompleta su Declaración de Salud.")
+    exclusion_paragraph.runs[0].font.name = 'Arial'
+    exclusion_paragraph = doc.add_paragraph(("       La operación corresponde a la planilla de {producto} en moneda {moneda} del mes de {mes}.").format(producto=producto, moneda=currency, mes=translate_month_to_spanish(get_current_month())))
     exclusion_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
+    exclusion_paragraph.runs[0].font.name = 'Arial'
 
     # Add a table operacion
     operacion_table = doc.add_table(rows=2, cols=7)
@@ -214,6 +230,7 @@ def generate_ds_incompleta_template(doc, data_row, currency, producto):
             # Obtener la fuente actual y establecer el tamaño
             font = cell.paragraphs[0].runs[0].font
             font.size = Pt(9)
+            font.name = 'Arial'
 
     # Definir el color gris (RGB: 192, 192, 192)
     gray_color = RGBColor(240, 240, 240)
@@ -231,9 +248,11 @@ def generate_ds_incompleta_template(doc, data_row, currency, producto):
 def generate_sin_capital_template(doc, data_row, currency, producto):
     from actions.file_actions import translate_month_to_spanish, get_current_month, format_date
     # Add texto exclusion
-    exclusion_paragraph = doc.add_paragraph("Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, debido a que no cuenta con capital en la planilla.")
-    exclusion_paragraph = doc.add_paragraph(("La operación corresponde a la planilla de {producto} en moneda {moneda} del mes de {mes}.").format(producto=producto, moneda=currency, mes=translate_month_to_spanish(get_current_month())))
+    exclusion_paragraph = doc.add_paragraph("       Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, debido a que no cuenta con capital en la planilla.")
+    exclusion_paragraph.runs[0].font.name = 'Arial'
+    exclusion_paragraph = doc.add_paragraph(("       La operación corresponde a la planilla de {producto} en moneda {moneda} del mes de {mes}.").format(producto=producto, moneda=currency, mes=translate_month_to_spanish(get_current_month())))
     exclusion_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
+    exclusion_paragraph.runs[0].font.name = 'Arial'
 
     # Add a table operacion
     operacion_table = doc.add_table(rows=2, cols=7)
@@ -265,6 +284,7 @@ def generate_sin_capital_template(doc, data_row, currency, producto):
             # Obtener la fuente actual y establecer el tamaño
             font = cell.paragraphs[0].runs[0].font
             font.size = Pt(9)
+            font.name = 'Arial'
 
     # Definir el color gris (RGB: 192, 192, 192)
     gray_color = RGBColor(240, 240, 240)
@@ -282,9 +302,11 @@ def generate_sin_capital_template(doc, data_row, currency, producto):
 def generate_mora_template(doc, data_row, currency, producto):
     from actions.file_actions import translate_month_to_spanish, get_current_month, format_date
     # Add texto exclusion
-    exclusion_paragraph = doc.add_paragraph("Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, debido a que poseen operaciones en mora.")
-    exclusion_paragraph = doc.add_paragraph(("La operación corresponde a la planilla de {producto} en moneda {moneda} del mes de {mes}.").format(producto=producto, moneda=currency, mes=translate_month_to_spanish(get_current_month())))
+    exclusion_paragraph = doc.add_paragraph("       Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, debido a que poseen operaciones en mora.")
+    exclusion_paragraph.runs[0].font.name = 'Arial'
+    exclusion_paragraph = doc.add_paragraph(("       La operación corresponde a la planilla de {producto} en moneda {moneda} del mes de {mes}.").format(producto=producto, moneda=currency, mes=translate_month_to_spanish(get_current_month())))
     exclusion_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
+    exclusion_paragraph.runs[0].font.name = 'Arial'
 
     # Add a table operacion
     operacion_table = doc.add_table(rows=2, cols=7)
@@ -316,6 +338,7 @@ def generate_mora_template(doc, data_row, currency, producto):
             # Obtener la fuente actual y establecer el tamaño
             font = cell.paragraphs[0].runs[0].font
             font.size = Pt(9)
+            font.name = 'Arial'
 
     # Definir el color gris (RGB: 192, 192, 192)
     gray_color = RGBColor(240, 240, 240)
@@ -333,9 +356,11 @@ def generate_mora_template(doc, data_row, currency, producto):
 def generate_edad_template(doc, data_row, currency, producto):
     from actions.file_actions import translate_month_to_spanish, get_current_month, format_date
     # Add texto exclusion
-    exclusion_paragraph = doc.add_paragraph("Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por superar la edad límite de 75 años.")
-    exclusion_paragraph = doc.add_paragraph(("La operación corresponde a la planilla de {producto} en moneda {moneda} del mes de {mes}.").format(producto=producto, moneda=currency, mes=translate_month_to_spanish(get_current_month())))
+    exclusion_paragraph = doc.add_paragraph("       Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por superar la edad límite de 75 años.")
+    exclusion_paragraph.runs[0].font.name = 'Arial'
+    exclusion_paragraph = doc.add_paragraph(("       La operación corresponde a la planilla de {producto} en moneda {moneda} del mes de {mes}.").format(producto=producto, moneda=currency, mes=translate_month_to_spanish(get_current_month())))
     exclusion_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
+    exclusion_paragraph.runs[0].font.name = 'Arial'
 
     # Add a table operacion
     operacion_table = doc.add_table(rows=2, cols=7)
@@ -367,6 +392,7 @@ def generate_edad_template(doc, data_row, currency, producto):
             # Obtener la fuente actual y establecer el tamaño
             font = cell.paragraphs[0].runs[0].font
             font.size = Pt(9)
+            font.name = 'Arial'
 
     # Definir el color gris (RGB: 192, 192, 192)
     gray_color = RGBColor(240, 240, 240)
@@ -384,9 +410,11 @@ def generate_edad_template(doc, data_row, currency, producto):
 def generate_operacion_vencida_template(doc, data_row, currency, producto):
     from actions.file_actions import translate_month_to_spanish, get_current_month, format_date
     # Add texto exclusion
-    exclusion_paragraph = doc.add_paragraph("Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, debido a que sus operaciones se encuentran vencidas.")
-    exclusion_paragraph = doc.add_paragraph(("La operación corresponde a la planilla de {producto} en moneda {moneda} del mes de {mes}.").format(producto=producto, moneda=currency, mes=translate_month_to_spanish(get_current_month())))
+    exclusion_paragraph = doc.add_paragraph("       Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, debido a que sus operaciones se encuentran vencidas.")
+    exclusion_paragraph.runs[0].font.name = 'Arial'
+    exclusion_paragraph = doc.add_paragraph(("       La operación corresponde a la planilla de {producto} en moneda {moneda} del mes de {mes}.").format(producto=producto, moneda=currency, mes=translate_month_to_spanish(get_current_month())))
     exclusion_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
+    exclusion_paragraph.runs[0].font.name = 'Arial'
 
     # Add a table operacion
     operacion_table = doc.add_table(rows=2, cols=7)
@@ -418,6 +446,7 @@ def generate_operacion_vencida_template(doc, data_row, currency, producto):
             # Obtener la fuente actual y establecer el tamaño
             font = cell.paragraphs[0].runs[0].font
             font.size = Pt(9)
+            font.name = 'Arial'
 
     # Definir el color gris (RGB: 192, 192, 192)
     gray_color = RGBColor(240, 240, 240)
@@ -435,9 +464,11 @@ def generate_operacion_vencida_template(doc, data_row, currency, producto):
 def generate_policita_suscripcion_template(doc, data_row, currency, producto):
     from actions.file_actions import translate_month_to_spanish, get_current_month, format_date
     # Add texto exclusion
-    exclusion_paragraph = doc.add_paragraph("Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por no adecuarse a la Política de Suscripción de la Compañía.")
-    exclusion_paragraph = doc.add_paragraph(("La operación corresponde a la planilla de {producto} en moneda {moneda} del mes de {mes}.").format(producto=producto, moneda=currency, mes=translate_month_to_spanish(get_current_month())))
+    exclusion_paragraph = doc.add_paragraph("       Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por no adecuarse a la Política de Suscripción de la Compañía.")
+    exclusion_paragraph.runs[0].font.name = 'Arial'
+    exclusion_paragraph = doc.add_paragraph(("       La operación corresponde a la planilla de {producto} en moneda {moneda} del mes de {mes}.").format(producto=producto, moneda=currency, mes=translate_month_to_spanish(get_current_month())))
     exclusion_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
+    exclusion_paragraph.runs[0].font.name = 'Arial'
 
     # Add a table operacion
     operacion_table = doc.add_table(rows=2, cols=7)
@@ -469,6 +500,7 @@ def generate_policita_suscripcion_template(doc, data_row, currency, producto):
             # Obtener la fuente actual y establecer el tamaño
             font = cell.paragraphs[0].runs[0].font
             font.size = Pt(9)
+            font.name = 'Arial'
 
     # Definir el color gris (RGB: 192, 192, 192)
     gray_color = RGBColor(240, 240, 240)
@@ -486,9 +518,11 @@ def generate_policita_suscripcion_template(doc, data_row, currency, producto):
 def generate_anulado_template(doc, data_row, currency, producto):
     from actions.file_actions import translate_month_to_spanish, get_current_month, format_date
     # Add texto exclusion
-    exclusion_paragraph = doc.add_paragraph("Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, debido a que poseen operaciones que fueron remitidas para anular previamente.")
-    exclusion_paragraph = doc.add_paragraph(("La operación corresponde a la planilla de {producto} en moneda {moneda} del mes de {mes}.").format(producto=producto, moneda=currency, mes=translate_month_to_spanish(get_current_month())))
+    exclusion_paragraph = doc.add_paragraph("       Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, debido a que poseen operaciones que fueron remitidas para anular previamente.")
+    exclusion_paragraph.runs[0].font.name = 'Arial'
+    exclusion_paragraph = doc.add_paragraph(("       La operación corresponde a la planilla de {producto} en moneda {moneda} del mes de {mes}.").format(producto=producto, moneda=currency, mes=translate_month_to_spanish(get_current_month())))
     exclusion_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
+    exclusion_paragraph.runs[0].font.name = 'Arial'
 
     # Add a table operacion
     operacion_table = doc.add_table(rows=2, cols=7)
@@ -520,6 +554,7 @@ def generate_anulado_template(doc, data_row, currency, producto):
             # Obtener la fuente actual y establecer el tamaño
             font = cell.paragraphs[0].runs[0].font
             font.size = Pt(9)
+            font.name = 'Arial'
 
     # Definir el color gris (RGB: 192, 192, 192)
     gray_color = RGBColor(240, 240, 240)
@@ -576,20 +611,21 @@ def generate_template_with_content(doc, entity_name, currency, producto, data_ro
     # Add date
     date_paragraph = doc.add_paragraph("Encarnación, " + get_formatted_date())
     date_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+    date_paragraph.runs[0].font.name = 'Arial'
 
     # Add entidad
-    entidad_paragraph = doc.add_paragraph("Señores")
-    entidad_paragraph = doc.add_paragraph(entity_name)
-    entidad_paragraph = doc.add_paragraph("Presente")
+    entidad_paragraph = doc.add_paragraph("""    Señores
+    {entity_name}
+    Presente""".format(entity_name=entity_name))
     entidad_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+    entidad_paragraph.runs[0].font.name = 'Arial'
 
     # Add receptor
-    receptor_paragraph = doc.add_paragraph("Atn: " + get_receptor_segun_entidad(entity_name))
+    receptor_paragraph = doc.add_paragraph("""Atn: {receptor}
+                        Ref.: Exclusión en Seguro de Vida Cancelación de Deudas 
+                        Nota.  N°: /2023""".format(receptor=get_receptor_segun_entidad(entity_name)))
     receptor_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-    receptor_paragraph = doc.add_paragraph("Ref.: Exclusión en Seguro de Vida Cancelación de Deudas")
-    receptor_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-    receptor_paragraph = doc.add_paragraph("Nota.  N°: /2023")
-    receptor_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+    receptor_paragraph.runs[0].font.name = 'Arial'
 
     template_name = data_row[14]    # Lugar de la lista donde se encuentra el motivo de la exclusion
     if template_name == "cumulo":
@@ -613,9 +649,10 @@ def generate_template_with_content(doc, entity_name, currency, producto, data_ro
     elif template_name == "anulado":
         generate_anulado_template(doc, data_row, currency, producto)    
 
-    # Add despedoda
+    # Add despedida
     despedida_paragraph = doc.add_paragraph("Sin otro particular nos despedimos de usted, atentamente.")
     despedida_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY 
+    despedida_paragraph.runs[0].font.name = 'Arial'
 
     # Save the document
     template_filename = f"{entity_name}_{template_name}_{currency}_template.docx"
