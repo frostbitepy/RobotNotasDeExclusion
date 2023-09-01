@@ -28,44 +28,7 @@ def format_date(date_obj):
     """Formatea un objeto datetime en formato DD/MM/AAAA."""
     formatted_date = date_obj.strftime("%d/%m/%Y")
     return formatted_date
-
-
-def replace_placeholders_in_word_template(doc, data_row):
-    """Replaces placeholders in a Word template with data from a row."""
-    for i, value in enumerate(data_row):
-        placeholder = f"{{Value{i+1}}}"
-        for paragraph in doc.paragraphs:
-            if placeholder in paragraph.text:
-                paragraph.text = paragraph.text.replace(placeholder, str(value))
-         
-
-def replace_placeholders_in_table(doc, data_row):
-    """Replaces placeholders in runs within a table with data from a row."""
-    for table in doc.tables:
-        for row in table.rows:
-            for cell in row.cells:
-                for paragraph in cell.paragraphs:
-                    for run in paragraph.runs:
-                        for i, value in enumerate(data_row):
-                            placeholder = f"{{Value{i+1}}}"
-                            if is_date(value):
-                                value = format_date(value)  # Format if it is a date
-                            if placeholder in run.text:
-                                run.text = run.text.replace(placeholder, str(value))
-
-
-def replace_additional_placeholders(doc, entidad, moneda):
-    """Replaces additional placeholders in a Word document with specific data."""
-    add_text_to_document(doc, "Encarnación, " + get_formatted_date())
-    for paragraph in doc.paragraphs:
-        for run in paragraph.runs:
-            # Replace placeholders with corresponding data
-            #run.text = run.text.replace("{fechanota}", "Encarncación, " + get_formatted_date())
-            run.text = run.text.replace("{entidad}", entidad)
-            run.text = run.text.replace("{receptor}", get_receptor_segun_entidad(entidad))
-            run.text = run.text.replace("{Val0}", moneda)
-            run.text = run.text.replace("{mes}", translate_month_to_spanish(get_current_month()))      
-            
+        
     
 def add_text_to_document(doc, new_text):
     # Obtiene el primer párrafo original
@@ -123,25 +86,6 @@ def translate_month_to_spanish(month):
     }
     
     return switch_case.get(month, "Mes no válido")
-
-
-def generate_word_files(data_list, template_dir, output_dir):
-    """Generates a Word file for each row's data using the appropriate template."""
-    template_files = os.listdir(template_dir)  # List all files in the template directory
-
-    for index, data_row in enumerate(data_list):
-        template_name = data_row[14] + '.docx' # Assuming the first element is the template name
-
-        if template_name in template_files:
-            selected_template_path = os.path.join(template_dir, template_name)
-
-            doc = Document(selected_template_path)
-            replace_placeholders_in_word_template(doc, data_row)
-            replace_placeholders_in_table(doc, data_row)
-            replace_additional_placeholders(doc)  # Add entity-specific placeholders
-            
-            output_word_path = f"{output_dir}/{data_row[14]}_document_{index + 1}.docx"
-            doc.save(output_word_path)
 
 
 def generate_word_files_streamlit(data_list, template_dir, output_dir, uploaded_file, entidad, moneda, producto):
