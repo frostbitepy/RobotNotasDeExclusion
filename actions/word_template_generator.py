@@ -9,32 +9,15 @@ from docx.oxml.ns import nsdecls
 from docx.shared import Inches
 
 output_dir = "output_data"
+file_counter = 1
 #template_dir = "note_templates/template.docx"
 
 
-def generate_cumulo_template(doc, data_row, currency, producto, code):
+def generate_cumulo_template(doc, data_row, currency, producto):
     from actions.file_actions import translate_month_to_spanish, get_current_month, format_date
-    # Define amount
-    if code == "CT6":
-        monto = "6.000.000.000"
-        exclusion_paragraph = doc.add_paragraph(("      Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por superar el capital de Gs. {monto}, establecido como cúmulo máximo por Asegurado con suscripción médica (Exclusión total del saldo capital).").format(monto=monto))
-    elif code == "CT3":
-        monto = "3.000.000.000"
-        exclusion_paragraph = doc.add_paragraph(("      Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por superar el capital de Gs. {monto}, establecido como cúmulo máximo por Asegurado (Exclusión total del saldo capital).").format(monto=monto))
-    elif code == "C1T":
-        monto = "__________"
-        exclusion_paragraph = doc.add_paragraph(("      Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por superar el capital de Gs. {monto}, establecido como cúmulo máximo por Asegurado (Exclusión total del saldo capital).").format(monto=monto))
-    elif code == "CP6":
-        monto = "6.000.000.000"
-        exclusion_paragraph = doc.add_paragraph(("      Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por superar el capital de Gs. {monto}, establecido como cúmulo máximo por Asegurado con suscripción médica (Exclusión parcial del saldo capital).").format(monto=monto))
-    elif code == "CP3":
-        monto = "3.000.000.000"
-        exclusion_paragraph = doc.add_paragraph(("      Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por superar el capital de Gs. {monto}, establecido como cúmulo máximo por Asegurado (Exclusión parcial del saldo capital).").format(monto=monto))
-    elif code == "CP1":
-        monto = "__________"
-        exclusion_paragraph = doc.add_paragraph(("      Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por superar el capital de Gs. {monto}, establecido como cúmulo máximo por Asegurado (Exclusión parcial del saldo capital).").format(monto=monto))
     # Add texto exclusion
-    
+    monto = "3.000.000.000"
+    exclusion_paragraph = doc.add_paragraph(("      Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por superar el capital de Gs. {monto}, establecido como cúmulo máximo por Asegurado.").format(monto=monto))
     exclusion_paragraph.runs[0].font.name = 'Arial'
     exclusion_paragraph = doc.add_paragraph(("      La operación corresponde a la planilla de {producto} en moneda {moneda} del mes de {mes}.").format(producto=producto, moneda=currency, mes=translate_month_to_spanish(get_current_month())))
     exclusion_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
@@ -126,7 +109,7 @@ def generate_fallecimiento_template(doc, data_row, currency, producto):
         cell.paragraphs[0].runs[0].font.bold = True
     row_cells = operacion_table.rows[1].cells
     row_cells[0].text = data_row[0]
-    row_cells[1].text = data_row[1]
+    row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
     if currency == "GS":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
@@ -182,7 +165,7 @@ def generate_falta_ds_template(doc, data_row, currency, producto):
         cell.paragraphs[0].runs[0].font.bold = True
     row_cells = operacion_table.rows[1].cells
     row_cells[0].text = data_row[0]
-    row_cells[1].text = data_row[1]
+    row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
     if currency == "GS":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
@@ -238,7 +221,7 @@ def generate_ds_incompleta_template(doc, data_row, currency, producto):
         cell.paragraphs[0].runs[0].font.bold = True
     row_cells = operacion_table.rows[1].cells
     row_cells[0].text = data_row[0]
-    row_cells[1].text = data_row[1]
+    row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
     if currency == "GS":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
@@ -296,7 +279,7 @@ def generate_sin_capital_template(doc, data_row, currency, producto):
         cell.paragraphs[0].runs[0].font.bold = True
     row_cells = operacion_table.rows[1].cells
     row_cells[0].text = data_row[0]
-    row_cells[1].text = data_row[1]
+    row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
     if currency == "GS":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
@@ -351,7 +334,7 @@ def generate_mora_template(doc, data_row, currency, producto):
         cell.paragraphs[0].runs[0].font.bold = True
     row_cells = operacion_table.rows[1].cells
     row_cells[0].text = data_row[0]
-    row_cells[1].text = data_row[1]
+    row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
     if currency == "GS":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
@@ -382,14 +365,10 @@ def generate_mora_template(doc, data_row, currency, producto):
     doc.add_paragraph(" ")    
 
 
-def generate_edad_template(doc, data_row, currency, producto, code):
+def generate_edad_template(doc, data_row, currency, producto):
     from actions.file_actions import translate_month_to_spanish, get_current_month, format_date
     # Add texto exclusion
-    if code == "ED1":
-        exclusion_paragraph = doc.add_paragraph("       Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por superar la edad límite de 75 años.")
-    elif code == "ED2":
-        exclusion_paragraph = doc.add_paragraph("       Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por tener edad inferior al límite de 18 años.")    
-    #exclusion_paragraph = doc.add_paragraph("       Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por superar la edad límite de 75 años.")
+    exclusion_paragraph = doc.add_paragraph("       Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por superar la edad límite de 75 años.")
     exclusion_paragraph.runs[0].font.name = 'Arial'
     exclusion_paragraph = doc.add_paragraph(("       La operación corresponde a la planilla de {producto} en moneda {moneda} del mes de {mes}.").format(producto=producto, moneda=currency, mes=translate_month_to_spanish(get_current_month())))
     exclusion_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
@@ -410,7 +389,7 @@ def generate_edad_template(doc, data_row, currency, producto, code):
         cell.paragraphs[0].runs[0].font.bold = True
     row_cells = operacion_table.rows[1].cells
     row_cells[0].text = data_row[0]
-    row_cells[1].text = data_row[1]
+    row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
     if currency == "GS":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
@@ -464,7 +443,7 @@ def generate_operacion_vencida_template(doc, data_row, currency, producto):
         cell.paragraphs[0].runs[0].font.bold = True
     row_cells = operacion_table.rows[1].cells
     row_cells[0].text = data_row[0]
-    row_cells[1].text = data_row[1]
+    row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
     if currency == "GS":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
@@ -519,7 +498,7 @@ def generate_policita_suscripcion_template(doc, data_row, currency, producto):
         cell.paragraphs[0].runs[0].font.bold = True
     row_cells = operacion_table.rows[1].cells
     row_cells[0].text = data_row[0]
-    row_cells[1].text = data_row[1]
+    row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
     if currency == "GS":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
@@ -574,7 +553,7 @@ def generate_anulado_template(doc, data_row, currency, producto):
         cell.paragraphs[0].runs[0].font.bold = True
     row_cells = operacion_table.rows[1].cells
     row_cells[0].text = data_row[0]
-    row_cells[1].text = data_row[1]
+    row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
     if currency == "GS":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
@@ -629,7 +608,7 @@ def generate_diferencia_ds_template(doc, data_row, currency, producto):
         cell.paragraphs[0].runs[0].font.bold = True
     row_cells = operacion_table.rows[1].cells
     row_cells[0].text = data_row[0]
-    row_cells[1].text = data_row[1]
+    row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
     if currency == "GS":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
@@ -688,7 +667,7 @@ def generate_informacion_adicional_template(doc, data_row, currency, producto):
         cell.paragraphs[0].runs[0].font.bold = True
     row_cells = operacion_table.rows[1].cells
     row_cells[0].text = data_row[0]
-    row_cells[1].text = data_row[1]
+    row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
     if currency == "GS":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
@@ -753,7 +732,7 @@ def generate_exclusiones_previas_template(doc, data_row, currency, producto):
         cell.paragraphs[0].runs[0].font.bold = True
     row_cells = operacion_table.rows[1].cells
     row_cells[0].text = data_row[0]
-    row_cells[1].text = data_row[1]
+    row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
     if currency == "GS":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
@@ -808,7 +787,7 @@ def generate_operacion_adelantada_template(doc, data_row, currency, producto):
         cell.paragraphs[0].runs[0].font.bold = True
     row_cells = operacion_table.rows[1].cells
     row_cells[0].text = data_row[0]
-    row_cells[1].text = data_row[1]
+    row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
     if currency == "GS":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
@@ -863,7 +842,7 @@ def generate_persona_juridica_template(doc, data_row, currency, producto):
         cell.paragraphs[0].runs[0].font.bold = True
     row_cells = operacion_table.rows[1].cells
     row_cells[0].text = data_row[0]
-    row_cells[1].text = data_row[1]
+    row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
     if currency == "GS":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
@@ -924,7 +903,7 @@ def generate_cambio_condiciones_template(doc, data_row, currency, producto):
         cell.paragraphs[0].runs[0].font.bold = True
     row_cells = operacion_table.rows[1].cells
     row_cells[0].text = data_row[0]
-    row_cells[1].text = data_row[1]
+    row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
     if currency == "GS":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
@@ -980,7 +959,7 @@ def generate_analisis_template(doc, data_row, currency, producto):
         cell.paragraphs[0].runs[0].font.bold = True
     row_cells = operacion_table.rows[1].cells
     row_cells[0].text = data_row[0]
-    row_cells[1].text = data_row[1]
+    row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
     if currency == "GS":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
@@ -1039,7 +1018,7 @@ def generate_historial_cobertura_template(doc, data_row, currency, producto):
         cell.paragraphs[0].runs[0].font.bold = True
     row_cells = operacion_table.rows[1].cells
     row_cells[0].text = data_row[0]
-    row_cells[1].text = data_row[1]
+    row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
     if currency == "GS":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
@@ -1095,7 +1074,7 @@ def generate_no_renovado_template(doc, data_row, currency, producto):
         cell.paragraphs[0].runs[0].font.bold = True
     row_cells = operacion_table.rows[1].cells
     row_cells[0].text = data_row[0]
-    row_cells[1].text = data_row[1]
+    row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
     if currency == "GS":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
@@ -1149,8 +1128,8 @@ def generate_template_with_content(doc, entity_name, currency, producto, data_ro
     receptor_paragraph.runs[0].font.name = 'Arial'
 
     template_name = str(data_row[14])    # Lugar de la lista donde se encuentra el motivo de la exclusion
-    if template_name == "CT3" or template_name == "CT6" or template_name == "C1T" or template_name == "CP3" or template_name == "CP6" or template_name == "CP1":
-        generate_cumulo_template(doc, data_row, currency, producto, code=template_name)
+    if template_name == "CT3":
+        generate_cumulo_template(doc, data_row, currency, producto)
     elif template_name == "FF1":
         generate_fallecimiento_template(doc, data_row, currency, producto)
     elif template_name == "DS4":
@@ -1161,8 +1140,8 @@ def generate_template_with_content(doc, entity_name, currency, producto, data_ro
         generate_sin_capital_template(doc, data_row, currency, producto)
     elif template_name == "MM1":
         generate_mora_template(doc, data_row, currency, producto)
-    elif template_name == "ED1" or template_name == "ED2":
-        generate_edad_template(doc, data_row, currency, producto, code=template_name)
+    elif template_name == "ED1":
+        generate_edad_template(doc, data_row, currency, producto)
     elif template_name == "OV1":
         generate_operacion_vencida_template(doc, data_row, currency, producto)
     elif template_name == "PS1":
@@ -1194,6 +1173,8 @@ def generate_template_with_content(doc, entity_name, currency, producto, data_ro
     despedida_paragraph.runs[0].font.name = 'Arial'
 
     # Save the document
-    template_filename = f"{entity_name}_{template_name}_{currency}_template.docx"
+    global file_counter
+    template_filename = f"{entity_name}_{template_name}_{currency}_{file_counter}_template.docx"
+    file_counter += 1
     doc.save(template_filename)
     return template_filename

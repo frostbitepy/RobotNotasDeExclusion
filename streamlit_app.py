@@ -30,7 +30,8 @@ def main():
             output_dir = tempfile.mkdtemp()  # Create a temporary directory
             generate_word_files_streamlit(data_list, template_dir, output_dir, uploaded_file, entidad, moneda, producto)
             st.session_state.generated_files = output_dir  # Store the output directory in session state
-            st.success("Notas generadas exitosamente!")        
+            st.success("Notas generadas exitosamente!") 
+            file_counter = 0       
             # Call the download_notes function here
             download_notes(output_dir)
 
