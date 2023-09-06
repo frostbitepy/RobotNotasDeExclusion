@@ -57,10 +57,10 @@ def generate_cumulo_template(doc, data_row, currency, producto):
         cell.paragraphs[0].runs[0].font.bold = True
     row_cells = operacion_table.rows[1].cells
     row_cells[0].text = str(data_row[4])
-    if currency == "GS":
+    if currency == "guaraníes":
         row_cells[1].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
         row_cells[2].text = str("{:,.0f}".format(data_row[8])).replace(",", ".")
-    elif currency == "USD":
+    elif currency == "dólares americanos":
         row_cells[1].text = str("{:,.2f}".format(data_row[6])).replace(".", "x").replace(",", ".").replace("x", ",")
         row_cells[2].text = str("{:,.2f}".format(data_row[8])).replace(".", "x").replace(",", ".").replace("x", ",")
     row_cells[3].text = format_date(data_row[10]) 
@@ -111,10 +111,10 @@ def generate_fallecimiento_template(doc, data_row, currency, producto):
     row_cells[0].text = data_row[0]
     row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
-    if currency == "GS":
+    if currency == "guaraníes":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
         row_cells[4].text = str("{:,.0f}".format(data_row[8])).replace(",", ".")
-    elif currency == "USD":
+    elif currency == "dólares americanos":
         row_cells[3].text = str("{:,.2f}".format(data_row[6])).replace(".", "x").replace(",", ".").replace("x", ",")
         row_cells[4].text = str("{:,.2f}".format(data_row[8])).replace(".", "x").replace(",", ".").replace("x", ",")
     row_cells[5].text = format_date(data_row[9])
@@ -167,10 +167,10 @@ def generate_falta_ds_template(doc, data_row, currency, producto):
     row_cells[0].text = data_row[0]
     row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
-    if currency == "GS":
+    if currency == "guaraníes":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
         row_cells[4].text = str("{:,.0f}".format(data_row[8])).replace(",", ".")
-    elif currency == "USD":
+    elif currency == "dólares americanos":
         row_cells[3].text = str("{:,.2f}".format(data_row[6])).replace(".", "x").replace(",", ".").replace("x", ",")
         row_cells[4].text = str("{:,.2f}".format(data_row[8])).replace(".", "x").replace(",", ".").replace("x", ",")
     row_cells[5].text = format_date(data_row[9])
@@ -223,10 +223,10 @@ def generate_ds_incompleta_template(doc, data_row, currency, producto):
     row_cells[0].text = data_row[0]
     row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
-    if currency == "GS":
+    if currency == "guaraníes":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
         row_cells[4].text = str("{:,.0f}".format(data_row[8])).replace(",", ".")
-    elif currency == "USD":
+    elif currency == "dólares americanos":
         row_cells[3].text = str("{:,.2f}".format(data_row[6])).replace(".", "x").replace(",", ".").replace("x", ",")
         row_cells[4].text = str("{:,.2f}".format(data_row[8])).replace(".", "x").replace(",", ".").replace("x", ",")
     row_cells[5].text = format_date(data_row[9])
@@ -281,10 +281,10 @@ def generate_sin_capital_template(doc, data_row, currency, producto):
     row_cells[0].text = data_row[0]
     row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
-    if currency == "GS":
+    if currency == "guaraníes":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
         row_cells[4].text = str("{:,.0f}".format(data_row[8])).replace(",", ".")
-    elif currency == "USD":
+    elif currency == "dólares americanos":
         row_cells[3].text = str("{:,.2f}".format(data_row[6])).replace(".", "x").replace(",", ".").replace("x", ",")
         row_cells[4].text = str("{:,.2f}".format(data_row[8])).replace(".", "x").replace(",", ".").replace("x", ",")
     row_cells[5].text = format_date(data_row[10]) 
@@ -336,10 +336,10 @@ def generate_mora_template(doc, data_row, currency, producto):
     row_cells[0].text = data_row[0]
     row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
-    if currency == "GS":
+    if currency == "guaraníes":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
         row_cells[4].text = str("{:,.0f}".format(data_row[8])).replace(",", ".")
-    elif currency == "USD":
+    elif currency == "dólares americanos":
         row_cells[3].text = str("{:,.2f}".format(data_row[6])).replace(".", "x").replace(",", ".").replace("x", ",")
         row_cells[4].text = str("{:,.2f}".format(data_row[8])).replace(".", "x").replace(",", ".").replace("x", ",")
     row_cells[5].text = format_date(data_row[9]) 
@@ -391,10 +391,10 @@ def generate_edad_template(doc, data_row, currency, producto):
     row_cells[0].text = data_row[0]
     row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
-    if currency == "GS":
+    if currency == "guaraníes":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
         row_cells[4].text = str("{:,.0f}".format(data_row[8])).replace(",", ".")
-    elif currency == "USD":
+    elif currency == "dólares americanos":
         row_cells[3].text = str("{:,.2f}".format(data_row[6])).replace(".", "x").replace(",", ".").replace("x", ",")
         row_cells[4].text = str("{:,.2f}".format(data_row[8])).replace(".", "x").replace(",", ".").replace("x", ",")
     row_cells[5].text = format_date(data_row[10]) 
@@ -445,10 +445,10 @@ def generate_operacion_vencida_template(doc, data_row, currency, producto):
     row_cells[0].text = data_row[0]
     row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
-    if currency == "GS":
+    if currency == "guaraníes":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
         row_cells[4].text = str("{:,.0f}".format(data_row[8])).replace(",", ".")
-    elif currency == "USD":
+    elif currency == "dólares americanos":
         row_cells[3].text = str("{:,.2f}".format(data_row[6])).replace(".", "x").replace(",", ".").replace("x", ",")
         row_cells[4].text = str("{:,.2f}".format(data_row[8])).replace(".", "x").replace(",", ".").replace("x", ",")
     row_cells[5].text = format_date(data_row[10]) 
@@ -500,10 +500,10 @@ def generate_policita_suscripcion_template(doc, data_row, currency, producto):
     row_cells[0].text = data_row[0]
     row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
-    if currency == "GS":
+    if currency == "guaraníes":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
         row_cells[4].text = str("{:,.0f}".format(data_row[8])).replace(",", ".")
-    elif currency == "USD":
+    elif currency == "dólares americanos":
         row_cells[3].text = str("{:,.2f}".format(data_row[6])).replace(".", "x").replace(",", ".").replace("x", ",")
         row_cells[4].text = str("{:,.2f}".format(data_row[8])).replace(".", "x").replace(",", ".").replace("x", ",")
     row_cells[5].text = format_date(data_row[9]) 
@@ -555,10 +555,10 @@ def generate_anulado_template(doc, data_row, currency, producto):
     row_cells[0].text = data_row[0]
     row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
-    if currency == "GS":
+    if currency == "guaraníes":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
         row_cells[4].text = str("{:,.0f}".format(data_row[8])).replace(",", ".")
-    elif currency == "USD":
+    elif currency == "dólares americanos":
         row_cells[3].text = str("{:,.2f}".format(data_row[6])).replace(".", "x").replace(",", ".").replace("x", ",")
         row_cells[4].text = str("{:,.2f}".format(data_row[8])).replace(".", "x").replace(",", ".").replace("x", ",")
     row_cells[5].text = format_date(data_row[10]) 
@@ -610,10 +610,10 @@ def generate_diferencia_ds_template(doc, data_row, currency, producto):
     row_cells[0].text = data_row[0]
     row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
-    if currency == "GS":
+    if currency == "guaraníes":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
         row_cells[4].text = str("{:,.0f}".format(data_row[8])).replace(",", ".")
-    elif currency == "USD":
+    elif currency == "dólares americanos":
         row_cells[3].text = str("{:,.2f}".format(data_row[6])).replace(".", "x").replace(",", ".").replace("x", ",")
         row_cells[4].text = str("{:,.2f}".format(data_row[8])).replace(".", "x").replace(",", ".").replace("x", ",")
     row_cells[5].text = format_date(data_row[9]) 
@@ -669,10 +669,10 @@ def generate_informacion_adicional_template(doc, data_row, currency, producto):
     row_cells[0].text = data_row[0]
     row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
-    if currency == "GS":
+    if currency == "guaraníes":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
         row_cells[4].text = str("{:,.0f}".format(data_row[8])).replace(",", ".")
-    elif currency == "USD":
+    elif currency == "dólares americanos":
         row_cells[3].text = str("{:,.2f}".format(data_row[6])).replace(".", "x").replace(",", ".").replace("x", ",")
         row_cells[4].text = str("{:,.2f}".format(data_row[8])).replace(".", "x").replace(",", ".").replace("x", ",")
     row_cells[5].text = format_date(data_row[9]) 
@@ -734,10 +734,10 @@ def generate_exclusiones_previas_template(doc, data_row, currency, producto):
     row_cells[0].text = data_row[0]
     row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
-    if currency == "GS":
+    if currency == "guaraníes":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
         row_cells[4].text = str("{:,.0f}".format(data_row[8])).replace(",", ".")
-    elif currency == "USD":
+    elif currency == "dólares americanos":
         row_cells[3].text = str("{:,.2f}".format(data_row[6])).replace(".", "x").replace(",", ".").replace("x", ",")
         row_cells[4].text = str("{:,.2f}".format(data_row[8])).replace(".", "x").replace(",", ".").replace("x", ",")
     row_cells[5].text = format_date(data_row[10]) 
@@ -789,10 +789,10 @@ def generate_operacion_adelantada_template(doc, data_row, currency, producto):
     row_cells[0].text = data_row[0]
     row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
-    if currency == "GS":
+    if currency == "guaraníes":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
         row_cells[4].text = str("{:,.0f}".format(data_row[8])).replace(",", ".")
-    elif currency == "USD":
+    elif currency == "dólares americanos":
         row_cells[3].text = str("{:,.2f}".format(data_row[6])).replace(".", "x").replace(",", ".").replace("x", ",")
         row_cells[4].text = str("{:,.2f}".format(data_row[8])).replace(".", "x").replace(",", ".").replace("x", ",")
     row_cells[5].text = format_date(data_row[9]) 
@@ -844,10 +844,10 @@ def generate_persona_juridica_template(doc, data_row, currency, producto):
     row_cells[0].text = data_row[0]
     row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
-    if currency == "GS":
+    if currency == "guaraníes":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
         row_cells[4].text = str("{:,.0f}".format(data_row[8])).replace(",", ".")
-    elif currency == "USD":
+    elif currency == "dólares americanos":
         row_cells[3].text = str("{:,.2f}".format(data_row[6])).replace(".", "x").replace(",", ".").replace("x", ",")
         row_cells[4].text = str("{:,.2f}".format(data_row[8])).replace(".", "x").replace(",", ".").replace("x", ",")
     row_cells[5].text = format_date(data_row[9]) 
@@ -905,10 +905,10 @@ def generate_cambio_condiciones_template(doc, data_row, currency, producto):
     row_cells[0].text = data_row[0]
     row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
-    if currency == "GS":
+    if currency == "guaraníes":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
         row_cells[4].text = str("{:,.0f}".format(data_row[8])).replace(",", ".")
-    elif currency == "USD":
+    elif currency == "dólares americanos":
         row_cells[3].text = str("{:,.2f}".format(data_row[6])).replace(".", "x").replace(",", ".").replace("x", ",")
         row_cells[4].text = str("{:,.2f}".format(data_row[8])).replace(".", "x").replace(",", ".").replace("x", ",")
     row_cells[5].text = format_date(data_row[9]) 
@@ -961,10 +961,10 @@ def generate_analisis_template(doc, data_row, currency, producto):
     row_cells[0].text = data_row[0]
     row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
-    if currency == "GS":
+    if currency == "guaraníes":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
         row_cells[4].text = str("{:,.0f}".format(data_row[8])).replace(",", ".")
-    elif currency == "USD":
+    elif currency == "dólares americanos":
         row_cells[3].text = str("{:,.2f}".format(data_row[6])).replace(".", "x").replace(",", ".").replace("x", ",")
         row_cells[4].text = str("{:,.2f}".format(data_row[8])).replace(".", "x").replace(",", ".").replace("x", ",")
     row_cells[5].text = format_date(data_row[9]) 
@@ -1020,10 +1020,10 @@ def generate_historial_cobertura_template(doc, data_row, currency, producto):
     row_cells[0].text = data_row[0]
     row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
-    if currency == "GS":
+    if currency == "guaraníes":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
         row_cells[4].text = str("{:,.0f}".format(data_row[8])).replace(",", ".")
-    elif currency == "USD":
+    elif currency == "dólares americanos":
         row_cells[3].text = str("{:,.2f}".format(data_row[6])).replace(".", "x").replace(",", ".").replace("x", ",")
         row_cells[4].text = str("{:,.2f}".format(data_row[8])).replace(".", "x").replace(",", ".").replace("x", ",")
     row_cells[5].text = format_date(data_row[9]) 
@@ -1076,10 +1076,10 @@ def generate_no_renovado_template(doc, data_row, currency, producto):
     row_cells[0].text = data_row[0]
     row_cells[1].text = str(data_row[1])
     row_cells[2].text = format_date(data_row[2])
-    if currency == "GS":
+    if currency == "guaraníes":
         row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
         row_cells[4].text = str("{:,.0f}".format(data_row[8])).replace(",", ".")
-    elif currency == "USD":
+    elif currency == "dólares americanos":
         row_cells[3].text = str("{:,.2f}".format(data_row[6])).replace(".", "x").replace(",", ".").replace("x", ",")
         row_cells[4].text = str("{:,.2f}".format(data_row[8])).replace(".", "x").replace(",", ".").replace("x", ",")
     row_cells[5].text = format_date(data_row[9]) 

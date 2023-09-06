@@ -18,6 +18,10 @@ def main():
     entidad = st.selectbox("Seleccionar Entidad:", entidades)
     # Agregar un widget de radio para elegir entre GS y USD
     moneda = st.selectbox("Elegir Moneda:", monedas)
+    if moneda == "GS":
+        moneda = "guaraníes"
+    elif moneda == "USD":
+        moneda = "dólares americanos"
     # Add a selectbox to choose the product tipe
     producto = st.selectbox("Elegir Producto:", productos)
     # Declare output_dir with a default value
