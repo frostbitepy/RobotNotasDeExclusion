@@ -365,10 +365,69 @@ def generate_mora_template(doc, data_row, currency, producto):
     doc.add_paragraph(" ")    
 
 
-def generate_edad_template(doc, data_row, currency, producto):
+def generate_edad_superior_template(doc, data_row, currency, producto):
     from actions.file_actions import translate_month_to_spanish, get_current_month, format_date
     # Add texto exclusion
-    exclusion_paragraph = doc.add_paragraph("       Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por superar la edad límite de 75 años.")
+    exclusion_paragraph = doc.add_paragraph("       Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por superar la edad límite.")
+    exclusion_paragraph.runs[0].font.name = 'Arial'
+    exclusion_paragraph = doc.add_paragraph(("       La operación corresponde a la planilla de {producto} en moneda {moneda} del mes de {mes}.").format(producto=producto, moneda=currency, mes=translate_month_to_spanish(get_current_month())))
+    exclusion_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
+    exclusion_paragraph.runs[0].font.name = 'Arial'
+
+    # Add a table operacion
+    operacion_table = doc.add_table(rows=2, cols=7)
+    operacion_table.style = 'Table Grid'
+    hdr_cells = operacion_table.rows[0].cells
+    hdr_cells[0].text = 'Nombre del cliente'
+    hdr_cells[1].text = 'Nro. Documento'
+    hdr_cells[2].text = 'Fecha Nacimiento'
+    hdr_cells[3].text = 'Capital Asegurado'
+    hdr_cells[4].text = 'Costo del Seguro'
+    hdr_cells[5].text = 'Fecha Vencimiento'
+    hdr_cells[6].text = 'Nro. Operación'
+    for cell in operacion_table.rows[0].cells:
+        cell.paragraphs[0].runs[0].font.bold = True
+    row_cells = operacion_table.rows[1].cells
+    row_cells[0].text = data_row[0]
+    row_cells[1].text = str(data_row[1])
+    row_cells[2].text = format_date(data_row[2])
+    if currency == "guaraníes":
+        row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
+        row_cells[4].text = str("{:,.0f}".format(data_row[8])).replace(",", ".")
+    elif currency == "dólares americanos":
+        row_cells[3].text = str("{:,.2f}".format(data_row[6])).replace(".", "x").replace(",", ".").replace("x", ",")
+        row_cells[4].text = str("{:,.2f}".format(data_row[8])).replace(".", "x").replace(",", ".").replace("x", ",")
+    row_cells[5].text = format_date(data_row[10]) 
+    row_cells[6].text = str(data_row[4])
+    for row in operacion_table.rows:
+        for cell in row.cells:
+            # Obtener la fuente actual y establecer el tamaño
+            font = cell.paragraphs[0].runs[0].font
+            font.size = Pt(9)
+            font.name = 'Arial'
+
+    # Definir el color gris (RGB: 192, 192, 192)
+    gray_color = RGBColor(240, 240, 240)
+
+    # Agregar fondo de color gris a la celda
+    for cell in hdr_cells:
+        tcPr = cell._tc.get_or_add_tcPr()
+        shading_elm = parse_xml(f'<w:shd {nsdecls("w")} w:fill="{gray_color}" />')
+        tcPr.append(shading_elm)
+   
+    # Add a section break
+    doc.add_paragraph(" ")
+    despedida_paragraph = doc.add_paragraph("""       Las edades límites para el seguro de Vida para Cancelación de Deudas son las siguientes:
+•	Ingreso al seguro: hasta 75 años.
+•	Permanencia: hasta 85 años.
+""")
+    despedida_paragraph.runs[0].font.name = 'Arial'
+
+
+def generate_edad_inferior_template(doc, data_row, currency, producto):
+    from actions.file_actions import translate_month_to_spanish, get_current_month, format_date
+    # Add texto exclusion
+    exclusion_paragraph = doc.add_paragraph("       Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por tener edad inferior al límite de 18 años.")
     exclusion_paragraph.runs[0].font.name = 'Arial'
     exclusion_paragraph = doc.add_paragraph(("       La operación corresponde a la planilla de {producto} en moneda {moneda} del mes de {mes}.").format(producto=producto, moneda=currency, mes=translate_month_to_spanish(get_current_month())))
     exclusion_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
@@ -742,7 +801,7 @@ def generate_exclusiones_previas_template(doc, data_row, currency, producto):
         row_cells[4].text = str("{:,.2f}".format(data_row[8])).replace(".", "x").replace(",", ".").replace("x", ",")
     row_cells[5].text = format_date(data_row[10]) 
     row_cells[6].text = str(data_row[4]) 
-    row_cells[7].text = " "
+    row_cells[7].text = data_row[15]
     for row in operacion_table.rows:
         for cell in row.cells:
             # Obtener la fuente actual y establecer el tamaño
@@ -1141,7 +1200,9 @@ def generate_template_with_content(doc, entity_name, currency, producto, data_ro
     elif template_name == "MM1":
         generate_mora_template(doc, data_row, currency, producto)
     elif template_name == "ED1":
-        generate_edad_template(doc, data_row, currency, producto)
+        generate_edad_superior_template(doc, data_row, currency, producto)
+    elif template_name == "ED2":
+        generate_edad_inferior_template(doc, data_row, currency, producto)
     elif template_name == "OV1":
         generate_operacion_vencida_template(doc, data_row, currency, producto)
     elif template_name == "PS1":
