@@ -29,25 +29,15 @@ def format_date(date_obj):
     formatted_date = date_obj.strftime("%d/%m/%Y")
     return formatted_date
         
-    
-def add_text_to_document(doc, new_text):
-    # Obtiene el primer párrafo original
-    first_paragraph = doc.paragraphs[0]
-    # Borra el contenido del primer párrafo
-    for run in first_paragraph.runs:
-        run.clear()
-    # Agrega el nuevo texto en el primer párrafo
-    first_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-    run = first_paragraph.add_run(new_text)
-
 
 def get_receptor_segun_entidad(entidad):
     """Returns the name of the receptor according to the entity."""
     switch_case = {
         "Provalor S.A.": "Sra. Viviana Trociuk",
-        "Progresar Corporation S.A.": "Sra. Raisa Gutmann",
+        "Progresar Corporation S.A.": "Sra. Viviana Vergara",
         "Sudameris Bank S.A.E.C.A.": "Sra. Alicia González",
-        "FACTORY": "Sra. Rocío González"
+        "Factory S.A.": "Sra. Rocío González",
+        "Creditos Paraná S.A.": "Sr. Andrés Servián"
     }    
     return switch_case.get(entidad, "Nombre del Receptor")
 
