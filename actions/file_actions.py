@@ -78,6 +78,32 @@ def translate_month_to_spanish(month):
     return switch_case.get(month, "Mes no válido")
 
 
+def group_data_by_code(data_list):
+    # Define los códigos que se utilizarán para agrupar los elementos
+    codes_to_group = ["DS1", "DS2", "DS4", "MM1", "ED1", "ED2", "EP1", "OV1", "OA1", "PJ1", "PS1", "SH1", "NR1", "FF1"]
+
+    # Crea un diccionario donde las claves son los códigos y los valores son listas vacías
+    grouped_data = {code: [] for code in codes_to_group}
+
+    # Itera a través de data_list y agrupa los elementos según los códigos
+    for data_row in data_list:
+        code = data_row[14]  # Suponiendo que data_row[14] contiene el código
+        if code in grouped_data:
+            grouped_data[code].append(data_row)
+
+    # Devuelve el diccionario de elementos agrupados
+    return grouped_data
+
+# Uso de la función para agrupar los elementos de data_list
+# data_list = [...]  # Tu lista de datos aquí
+# grouped_data = group_data_by_code(data_list)
+
+# Ahora puedes acceder a los elementos agrupados por código, por ejemplo:
+# grouped_data["DS1"] contendrá todos los elementos con data_row[14] == "DS1"
+# grouped_data["DS2"] contendrá todos los elementos con data_row[14] == "DS2"
+# Y así sucesivamente para otros códigos.
+
+
 def generate_word_files_streamlit(data_list, template_dir, output_dir, uploaded_file, entidad, moneda, producto):
     """Generates a Word file for each row's data using the appropriate template. Streamlit app."""
     # List all files in the template directory

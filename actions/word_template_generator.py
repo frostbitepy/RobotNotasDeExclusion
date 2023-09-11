@@ -704,7 +704,7 @@ def generate_diferencia_ds_template(doc, data_row, currency, producto):
 def generate_informacion_adicional_template(doc, data_row, currency, producto):
     from actions.file_actions import translate_month_to_spanish, get_current_month, format_date
     # Add texto exclusion
-    exclusion_paragraph = doc.add_paragraph("       Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por motivo de solicitud de ingormación adicional con respecto a lo declarado en los ítems de la Declaración de Salud.")
+    exclusion_paragraph = doc.add_paragraph("       Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por motivo de solicitud de información adicional con respecto a lo declarado en los ítems de la Declaración de Salud.")
     exclusion_paragraph.runs[0].font.name = 'Arial'
     exclusion_paragraph = doc.add_paragraph(("       La operación corresponde a la planilla de {producto} en moneda {moneda} del mes de {mes}.").format(producto=producto, moneda=currency, mes=translate_month_to_spanish(get_current_month())))
     exclusion_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
@@ -1147,6 +1147,67 @@ def generate_no_renovado_template(doc, data_row, currency, producto):
     for row in operacion_table.rows:
         for cell in row.cells:
             # Obtener la fuente actual y establecer el tamaño
+            font = cell.paragraphs[0].runs[0].font
+            font.size = Pt(9)
+            font.name = 'Arial'
+
+    # Definir el color gris (RGB: 192, 192, 192)
+    gray_color = RGBColor(240, 240, 240)
+
+    # Agregar fondo de color gris a la celda
+    for cell in hdr_cells:
+        tcPr = cell._tc.get_or_add_tcPr()
+        shading_elm = parse_xml(f'<w:shd {nsdecls("w")} w:fill="{gray_color}" />')
+        tcPr.append(shading_elm)
+   
+    # Add a section break
+    doc.add_paragraph(" ")
+
+
+def generate_testing_template(doc, data_rows, currency, producto):
+    from actions.file_actions import translate_month_to_spanish, get_current_month, format_date
+    # Add texto exclusion
+    exclusion_paragraph = doc.add_paragraph("       Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, debido a que su operación no cuenta con permanencia debido a que no fue remitida para renovar anteriormente.")
+    exclusion_paragraph.runs[0].font.name = 'Arial'
+    exclusion_paragraph = doc.add_paragraph(("       La operación corresponde a la planilla de {producto} en moneda {moneda} del mes de {mes}.").format(producto=producto, moneda=currency, mes=translate_month_to_spanish(get_current_month())))
+    exclusion_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
+    exclusion_paragraph.runs[0].font.name = 'Arial'
+
+    # Add a table operacion
+    operacion_table = doc.add_table(rows=1, cols=8)
+    operacion_table.style = 'Table Grid'
+    hdr_cells = operacion_table.rows[0].cells
+    hdr_cells[0].text = 'Nombre del cliente'
+    hdr_cells[1].text = 'Nro. Documento'
+    hdr_cells[2].text = 'Fecha Nacimiento'
+    hdr_cells[3].text = 'Capital Asegurado'
+    hdr_cells[4].text = 'Costo del Seguro'
+    hdr_cells[5].text = 'Fecha Inicio'
+    hdr_cells[6].text = 'Fecha Vencimiento'
+    hdr_cells[7].text = 'Nro. Operación'
+    for cell in operacion_table.rows[0].cells:
+        cell.paragraphs[0].runs[0].font.bold = True
+    
+    for data_row in data_rows:
+        row_cells = operacion_table.add_row().cells
+        row_cells[0].text = data_row[0]
+        row_cells[1].text = str(data_row[1])
+        row_cells[2].text = format_date(data_row[2])
+        
+        if currency == "guaraníes":
+            row_cells[3].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
+            row_cells[4].text = str("{:,.0f}".format(data_row[8])).replace(",", ".")
+        elif currency == "dólares americanos":
+            row_cells[3].text = str("{:,.2f}".format(data_row[6])).replace(".", "x").replace(",", ".").replace("x", ",")
+            row_cells[4].text = str("{:,.2f}".format(data_row[8])).replace(".", "x").replace(",", ".").replace("x", ",")
+        
+        row_cells[5].text = format_date(data_row[9]) 
+        row_cells[6].text = format_date(data_row[10]) 
+        row_cells[7].text = str(data_row[4])
+
+    # Format table cell fonts and styles
+    for row in operacion_table.rows:
+        for cell in row.cells:
             font = cell.paragraphs[0].runs[0].font
             font.size = Pt(9)
             font.name = 'Arial'
