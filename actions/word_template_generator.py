@@ -13,10 +13,152 @@ file_counter = 1
 #template_dir = "note_templates/template.docx"
 
 
-def generate_cumulo_template(doc, data_row, currency, producto):
+def generate_cumulo_template3(doc, data_row, currency, producto):
     from actions.file_actions import translate_month_to_spanish, get_current_month, format_date
     # Add texto exclusion
     monto = "3.000.000.000"
+    exclusion_paragraph = doc.add_paragraph(("      Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por superar el capital de Gs. {monto}, establecido como cúmulo máximo por Asegurado.").format(monto=monto))
+    exclusion_paragraph.runs[0].font.name = 'Arial'
+    exclusion_paragraph = doc.add_paragraph(("      La operación corresponde a la planilla de {producto} en moneda {moneda} del mes de {mes}.").format(producto=producto, moneda=currency, mes=translate_month_to_spanish(get_current_month())))
+    exclusion_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
+    exclusion_paragraph.runs[0].font.name = 'Arial'
+
+    # Add a table asegurado
+    asegurado_table = doc.add_table(rows=3, cols=2)
+    asegurado_table.style = 'Table Grid'
+    nombre_cells = asegurado_table.rows[0].cells
+    nombre_cells[0].text = 'Asegurado:'
+    nombre_cells[1].text = data_row[0]
+    documento_cells = asegurado_table.rows[1].cells
+    documento_cells[0].text = 'Documento:'
+    documento_cells[1].text = str(data_row[1])
+    nacimiento_cells = asegurado_table.rows[2].cells
+    nacimiento_cells[0].text = 'Fecha de Nacimiento:'
+    nacimiento_cells[1].text = format_date(data_row[2])
+    for row in asegurado_table.rows:
+        for cell in row.cells:
+            # Obtener la fuente actual y establecer el tamaño
+            font = cell.paragraphs[0].runs[0].font
+            font.size = Pt(9)
+            font.name = 'Arial'
+
+    # Add a section break
+    doc.add_paragraph(" ")
+    
+    # Add a table operacion
+    operacion_table = doc.add_table(rows=2, cols=4)
+    operacion_table.style = 'Table Grid'
+    hdr_cells = operacion_table.rows[0].cells
+    hdr_cells[0].text = 'Nro. Operación'
+    hdr_cells[1].text = 'Monto'
+    hdr_cells[2].text = 'Costo'
+    hdr_cells[3].text = 'Fecha Vencimiento'
+    for cell in operacion_table.rows[0].cells:
+        cell.paragraphs[0].runs[0].font.bold = True
+    row_cells = operacion_table.rows[1].cells
+    row_cells[0].text = str(data_row[4])
+    if currency == "guaraníes":
+        row_cells[1].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
+        row_cells[2].text = str("{:,.0f}".format(data_row[8])).replace(",", ".")
+    elif currency == "dólares americanos":
+        row_cells[1].text = str("{:,.2f}".format(data_row[6])).replace(".", "x").replace(",", ".").replace("x", ",")
+        row_cells[2].text = str("{:,.2f}".format(data_row[8])).replace(".", "x").replace(",", ".").replace("x", ",")
+    row_cells[3].text = format_date(data_row[10]) 
+    for row in operacion_table.rows:
+        for cell in row.cells:
+            # Obtener la fuente actual y establecer el tamaño
+            font = cell.paragraphs[0].runs[0].font
+            font.size = Pt(9)
+            font.name = 'Arial'
+    
+    # Definir el color gris (RGB: 192, 192, 192)
+    gray_color = RGBColor(240, 240, 240)
+
+    # Agregar fondo de color gris a la celda
+    for cell in hdr_cells:
+        tcPr = cell._tc.get_or_add_tcPr()
+        shading_elm = parse_xml(f'<w:shd {nsdecls("w")} w:fill="{gray_color}" />')
+        tcPr.append(shading_elm)
+   
+    # Add a section break
+    doc.add_paragraph(" ")
+
+
+def generate_cumulo_template6(doc, data_row, currency, producto):
+    from actions.file_actions import translate_month_to_spanish, get_current_month, format_date
+    # Add texto exclusion
+    monto = "6.000.000.000"
+    exclusion_paragraph = doc.add_paragraph(("      Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por superar el capital de Gs. {monto}, establecido como cúmulo máximo por Asegurado.").format(monto=monto))
+    exclusion_paragraph.runs[0].font.name = 'Arial'
+    exclusion_paragraph = doc.add_paragraph(("      La operación corresponde a la planilla de {producto} en moneda {moneda} del mes de {mes}.").format(producto=producto, moneda=currency, mes=translate_month_to_spanish(get_current_month())))
+    exclusion_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
+    exclusion_paragraph.runs[0].font.name = 'Arial'
+
+    # Add a table asegurado
+    asegurado_table = doc.add_table(rows=3, cols=2)
+    asegurado_table.style = 'Table Grid'
+    nombre_cells = asegurado_table.rows[0].cells
+    nombre_cells[0].text = 'Asegurado:'
+    nombre_cells[1].text = data_row[0]
+    documento_cells = asegurado_table.rows[1].cells
+    documento_cells[0].text = 'Documento:'
+    documento_cells[1].text = str(data_row[1])
+    nacimiento_cells = asegurado_table.rows[2].cells
+    nacimiento_cells[0].text = 'Fecha de Nacimiento:'
+    nacimiento_cells[1].text = format_date(data_row[2])
+    for row in asegurado_table.rows:
+        for cell in row.cells:
+            # Obtener la fuente actual y establecer el tamaño
+            font = cell.paragraphs[0].runs[0].font
+            font.size = Pt(9)
+            font.name = 'Arial'
+
+    # Add a section break
+    doc.add_paragraph(" ")
+    
+    # Add a table operacion
+    operacion_table = doc.add_table(rows=2, cols=4)
+    operacion_table.style = 'Table Grid'
+    hdr_cells = operacion_table.rows[0].cells
+    hdr_cells[0].text = 'Nro. Operación'
+    hdr_cells[1].text = 'Monto'
+    hdr_cells[2].text = 'Costo'
+    hdr_cells[3].text = 'Fecha Vencimiento'
+    for cell in operacion_table.rows[0].cells:
+        cell.paragraphs[0].runs[0].font.bold = True
+    row_cells = operacion_table.rows[1].cells
+    row_cells[0].text = str(data_row[4])
+    if currency == "guaraníes":
+        row_cells[1].text = str("{:,.0f}".format(data_row[6])).replace(",", ".")
+        row_cells[2].text = str("{:,.0f}".format(data_row[8])).replace(",", ".")
+    elif currency == "dólares americanos":
+        row_cells[1].text = str("{:,.2f}".format(data_row[6])).replace(".", "x").replace(",", ".").replace("x", ",")
+        row_cells[2].text = str("{:,.2f}".format(data_row[8])).replace(".", "x").replace(",", ".").replace("x", ",")
+    row_cells[3].text = format_date(data_row[10]) 
+    for row in operacion_table.rows:
+        for cell in row.cells:
+            # Obtener la fuente actual y establecer el tamaño
+            font = cell.paragraphs[0].runs[0].font
+            font.size = Pt(9)
+            font.name = 'Arial'
+    
+    # Definir el color gris (RGB: 192, 192, 192)
+    gray_color = RGBColor(240, 240, 240)
+
+    # Agregar fondo de color gris a la celda
+    for cell in hdr_cells:
+        tcPr = cell._tc.get_or_add_tcPr()
+        shading_elm = parse_xml(f'<w:shd {nsdecls("w")} w:fill="{gray_color}" />')
+        tcPr.append(shading_elm)
+   
+    # Add a section break
+    doc.add_paragraph(" ")
+
+
+def generate_cumulo_templatex(doc, data_row, currency, producto):
+    from actions.file_actions import translate_month_to_spanish, get_current_month, format_date
+    # Add texto exclusion
+    monto = "xxxxxxx"
     exclusion_paragraph = doc.add_paragraph(("      Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por superar el capital de Gs. {monto}, establecido como cúmulo máximo por Asegurado.").format(monto=monto))
     exclusion_paragraph.runs[0].font.name = 'Arial'
     exclusion_paragraph = doc.add_paragraph(("      La operación corresponde a la planilla de {producto} en moneda {moneda} del mes de {mes}.").format(producto=producto, moneda=currency, mes=translate_month_to_spanish(get_current_month())))
@@ -1249,7 +1391,11 @@ def generate_template_with_content(doc, entity_name, currency, producto, data_ro
 
     template_name = str(data_row[14])    # Lugar de la lista donde se encuentra el motivo de la exclusion
     if template_name == "CT3":
-        generate_cumulo_template(doc, data_row, currency, producto)
+        generate_cumulo_template3(doc, data_row, currency, producto)
+    elif template_name == "CT6":
+        generate_cumulo_template6(doc, data_row, currency, producto)
+    elif template_name == "CT1":
+        generate_cumulo_templatex(doc, data_row, currency, producto)
     elif template_name == "FF1":
         generate_fallecimiento_template(doc, data_row, currency, producto)
     elif template_name == "DS4":
