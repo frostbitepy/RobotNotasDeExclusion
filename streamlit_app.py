@@ -9,7 +9,7 @@ from actions.file_actions import extract_data_from_excel, generate_word_files_st
 template_dir = "note_templates/template.docx"
 entidades = ["Creditos Paraná S.A.", "Factory S.A.", "Progresar Corporation S.A.", "Provalor S.A.", "Sudameris Bank S.A.E.C.A."]
 monedas = ["GS", "USD"]
-productos = ["Préstamos de Consumo", "Renovación de Préstamos", "Renovación Préstamos de Consumo", "Sobregiros", "Tarjetas de Crédito"]
+productos = ["Préstamos de Consumo", "Renovación de Préstamos", "Renovación Préstamos de Consumo", "Sobregiros", "Tarjetas de Crédito", "Casa Matriz", "la sucursal de Santa Rita", "la sucursal de Fram", "la sucursaln de Ayolas"]
 
 def main():
     st.title("Generación automática de Notas de Exclusión")
