@@ -1390,11 +1390,11 @@ def generate_template_with_content(doc, entity_name, currency, producto, data_ro
     receptor_paragraph.runs[0].font.name = 'Arial'
 
     template_name = str(data_row[14])    # Lugar de la lista donde se encuentra el motivo de la exclusion
-    if template_name == "CT3":
+    if template_name == "CT3" or template_name == "CP3":
         generate_cumulo_template3(doc, data_row, currency, producto)
-    elif template_name == "CT6":
+    elif template_name == "CT6" or template_name == "CP6":
         generate_cumulo_template6(doc, data_row, currency, producto)
-    elif template_name == "CT1":
+    elif template_name == "CT1" or template_name == "CP1":
         generate_cumulo_templatex(doc, data_row, currency, producto)
     elif template_name == "FF1":
         generate_fallecimiento_template(doc, data_row, currency, producto)
