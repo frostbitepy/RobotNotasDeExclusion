@@ -5,6 +5,7 @@ import streamlit as st
 from docx import Document
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 from actions.word_template_generator import generate_template_with_content
+from actions.multi_word_template_generator import multi_generate_template_with_content
 
 
 def extract_data_from_excel(excel_file_path):
@@ -15,7 +16,7 @@ def extract_data_from_excel(excel_file_path):
     for row in sheet.iter_rows(min_row=2, values_only=True):
         data_list.append(list(row))
     workbook.close()
-    #data_list = reorder_values_for_entity(data_list, entidad)
+    # data_list = reorder_values_for_entity(data_list, entidad)
     return data_list
 
 
@@ -91,6 +92,9 @@ def group_data_by_code(data_list):
         if code in grouped_data:
             grouped_data[code].append(data_row)
 
+    # Remove key-value pairs with empty lists as values
+    grouped_data = {k: v for k, v in grouped_data.items() if v}
+
     # Devuelve el diccionario de elementos agrupados
     return grouped_data
 
@@ -123,3 +127,28 @@ def generate_word_files_streamlit(data_list, template_dir, output_dir, uploaded_
 
     # Store the generated files in session state
     st.session_state.generated_files = generated_files
+
+def multi_generate_word_files_streamlit(data_dict, template_dir, output_dir, uploaded_file, entidad, moneda, producto):
+    """Generates a Word file for each row's data using the appropriate template. Streamlit app."""
+
+    generated_files = []  # List to store paths of generated files
+
+    for key, dict_items in data_dict.items():
+        # Assuming the first element is the template name 
+
+        doc = Document(template_dir)
+        multi_generate_template_with_content(doc, entidad, moneda, producto, key, dict_items)
+        output_word_path = f"{output_dir}/{entidad}_{dict_items[0][14]}_document_{str(dict_items[0][14])}.docx"
+        doc.save(output_word_path)
+        generated_files.append(output_word_path)  # Store generated file path
+
+    # Store the generated files in session state
+    st.session_state.generated_files = generated_files
+
+
+if __name__ == "__main__":
+    # Para probar algunas funciones
+    # por algún motivo es necesario comentar algunos imports
+    print(extract_data_from_excel("resumen exclusiones - SUDAMERIS multi.xlsx"))
+    print("    ")
+    print(group_data_by_code(extract_data_from_excel("resumen exclusiones - SUDAMERIS multi.xlsx")))

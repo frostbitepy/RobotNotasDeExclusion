@@ -674,7 +674,7 @@ def generate_operacion_vencida_template(doc, data_row, currency, producto):
     doc.add_paragraph(" ")
 
 
-def generate_policita_suscripcion_template(doc, data_row, currency, producto):
+def generate_politica_suscripcion_template(doc, data_row, currency, producto):
     from actions.file_actions import translate_month_to_spanish, get_current_month, format_date
     # Add texto exclusion
     exclusion_paragraph = doc.add_paragraph("       Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por no adecuarse a la Política de Suscripción de la Compañía.")
@@ -1413,7 +1413,7 @@ def generate_template_with_content(doc, entity_name, currency, producto, data_ro
     elif template_name == "OV1":
         generate_operacion_vencida_template(doc, data_row, currency, producto)
     elif template_name == "PS1":
-        generate_policita_suscripcion_template(doc, data_row, currency, producto)
+        generate_politica_suscripcion_template(doc, data_row, currency, producto)
     elif template_name == "anulado":
         generate_anulado_template(doc, data_row, currency, producto)
     elif template_name == "DS2":

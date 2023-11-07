@@ -70,3 +70,6 @@ input_data/
 
 # Ignore documentation
 docs/
+
+# Ignore excel files
+*.xlsx
