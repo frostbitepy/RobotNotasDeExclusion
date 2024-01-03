@@ -1385,7 +1385,7 @@ def generate_template_with_content(doc, entity_name, currency, producto, data_ro
     # Add receptor
     receptor_paragraph = doc.add_paragraph("""Atn: {receptor}
                         Ref.: Exclusión en Seguro de Vida Cancelación de Deudas 
-                        Nota.  N°: /2023""".format(receptor=get_receptor_segun_entidad(entity_name)))
+                        Nota.  N°: /2024""".format(receptor=get_receptor_segun_entidad(entity_name)))
     receptor_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
     receptor_paragraph.runs[0].font.name = 'Arial'
 
