@@ -132,7 +132,7 @@ def generate_falta_ds_template(doc, data_dict, currency, producto):
 def generate_ds_incompleta_template(doc, data_dict, currency, producto):
     from actions.file_actions import translate_month_to_spanish, get_current_month, format_date
     # Add texto exclusion
-    exclusion_paragraph = doc.add_paragraph("       Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por presentar incompleta su Declaración de Salud.")
+    exclusion_paragraph = doc.add_paragraph("        Por la presente se informa la exclusión del Prestatario indicado a continuación, de la póliza de Seguro de Vida Colectivo para Cancelación de Deudas, por la ausencia de datos consignados en la planilla de Seguros.")
     exclusion_paragraph.runs[0].font.name = 'Arial'
     exclusion_paragraph = doc.add_paragraph(("       La operación corresponde a la planilla de {producto} en moneda {moneda} del mes de {mes}.").format(producto=producto, moneda=currency, mes=translate_month_to_spanish(get_current_month())))
     exclusion_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
